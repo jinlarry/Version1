@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AllRolesViewModel
+
+<h3>This is all roles view</h3>
+
+<ul class="list-group">
+    @foreach (var role in Model.Roles)
+    {
+        <li class="list-group-item">@role.Name</li>
+    }
+</ul>
