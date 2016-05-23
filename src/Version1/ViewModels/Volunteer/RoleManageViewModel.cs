@@ -6,11 +6,9 @@ using Version1.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-
-
 namespace Version1.ViewModels.Account
 {
-    public class AllRolesViewModel
+    public class RoleManageViewModel
     {
         public List<IdentityRole> Roles { get; set; }
     }
