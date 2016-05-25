@@ -1,1 +1,14 @@
-﻿
+﻿@model RoleManageViewModel
+
+<h4>Role Manage</h4>
+<br />
+<ul class="list-group">
+    @foreach(var role in Model.Roles)
+    {
+        <li class="list-group-item">
+            @role.Name
+        </li>
+    }
+</ul>
+
+<a class="btn btn-default" role="button" asp-action="EditRoles" asp-controller="Volunteer">Edit</a>

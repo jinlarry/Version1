@@ -8,9 +8,10 @@ using Version1.Models;
 namespace Version1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160524105026_ini5")]
+    partial class ini5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -155,6 +156,15 @@ namespace Version1.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
+            modelBuilder.Entity("Version1.Models.Status", b =>
+                {
+                    b.Property<string>("StatuId");
+
+                    b.Property<string>("Id");
+
+                    b.HasKey("StatuId");
+                });
+
             modelBuilder.Entity("Version1.Models.Team", b =>
                 {
                     b.Property<string>("Id");
@@ -168,11 +178,11 @@ namespace Version1.Migrations
 
             modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("Id");
 
                     b.Property<string>("TeamId");
 
-                    b.HasKey("UserId", "TeamId");
+                    b.HasKey("Id", "TeamId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -207,6 +217,13 @@ namespace Version1.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Version1.Models.Status", b =>
+                {
+                    b.HasOne("Version1.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Id");
+                });
+
             modelBuilder.Entity("Version1.Models.Team", b =>
                 {
                     b.HasOne("Version1.Models.ApplicationUser")
@@ -216,13 +233,13 @@ namespace Version1.Migrations
 
             modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
                 {
+                    b.HasOne("Version1.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Id");
+
                     b.HasOne("Version1.Models.Team")
                         .WithMany()
                         .HasForeignKey("TeamId");
-
-                    b.HasOne("Version1.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
         }
     }

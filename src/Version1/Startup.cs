@@ -98,7 +98,7 @@ namespace Version1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=home}/{action=index}/{id?}");
+                    template: "{controller=Volunteer}/{action=Index}/{param?}");
             });
         }
 

@@ -8,9 +8,10 @@ using Version1.Models;
 namespace Version1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160524105314_ini6")]
+    partial class ini6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -168,11 +169,11 @@ namespace Version1.Migrations
 
             modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("Id");
 
                     b.Property<string>("TeamId");
 
-                    b.HasKey("UserId", "TeamId");
+                    b.HasKey("Id", "TeamId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -216,13 +217,13 @@ namespace Version1.Migrations
 
             modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
                 {
+                    b.HasOne("Version1.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("Id");
+
                     b.HasOne("Version1.Models.Team")
                         .WithMany()
                         .HasForeignKey("TeamId");
-
-                    b.HasOne("Version1.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
         }
     }

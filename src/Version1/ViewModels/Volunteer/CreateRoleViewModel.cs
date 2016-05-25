@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Version1.ViewModels.Account
+namespace Version1.ViewModels.Volunteer
 {
     public class CreateRoleViewModel
     {
         [Required]
-        [Display(Name = "Role Name")]
+        [Display(Name = "Role Name: ")]
         public string RoleName { get; set; }
     }
 }

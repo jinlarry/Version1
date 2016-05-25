@@ -1,0 +1,53 @@
+﻿@model EditRolesViewModel
+
+<h1>Edit roles</h1>
+
+<form class="form-horizontal" id="formEditRole" asp-controller="Volunteer" asp-action="EditRoles" method="post" role="form">
+
+    <input id="Roles" value="@Model.Roles" hidden />
+
+    <table id="tblUsersRoles" class="table">
+        <thead>
+            <tr>
+                <th>All Users \ All Roles</th>
+                @foreach(var role in Model.Roles)
+                {
+                    <th>
+                        @role.Name
+                        <input value="@role.Name" hidden />
+                    </th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var item in Model.UserCheckValueDict)
+            {
+                <tr>
+                    <td>
+                        @item.Key.FirstName @item.Key.LastName
+
+                        @* this value will be insert in the dict as a key *@
+                        <input value="@item.Key.Id" hidden />
+                    </td>
+                    @foreach(var val in item.Value)
+                    {
+                        <td>
+                            @if(val)
+                            {
+                                <button class="btneditRole btn btn-sm glyphicon glyphicon-ok" role="checkbox" value="true"></button>
+                            }
+                            else
+                            {
+                                <button class="btneditRole btn btn-sm glyphicon glyphicon-remove" role="checkbox" value="false"></button>
+                            }
+
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button id="submit" class="btn btn-default btnSubmit" type="submit">Save Roles</button>
+</form>
