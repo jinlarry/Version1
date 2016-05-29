@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Version1.Controllers
+namespace Version1.ViewModels.Volunteer
 {
-    public class VolunteerController
+    public class ProfileManageViewModel
     {
     }
 }

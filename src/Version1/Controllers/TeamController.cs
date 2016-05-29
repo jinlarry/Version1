@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Version1.Controllers
 {
-    public class VolunteerController
+    public class TeamController
     {
     }
 }

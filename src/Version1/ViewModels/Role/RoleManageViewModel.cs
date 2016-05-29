@@ -9,11 +9,12 @@ namespace Version1.ViewModels.Volunteer
     {
         [Display(Name = "Roles: ")]
         public List<IdentityRole> Roles { get; set; }
+
         [Display(Name = "Users: ")]
         public List<ApplicationUser> Users { get; set; }
-        public RoleManageViewModel()
-        {
-            Roles = new List<IdentityRole>();
-        }
+
+        public List<string> NewRoleNames { get; set; }
+
+        public List<string> RemovedRoleNames { get; set; }
     }
 }
