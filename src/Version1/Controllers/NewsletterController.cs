@@ -8,7 +8,7 @@ using Microsoft.AspNet.Mvc;
 
 namespace Version1.Controllers
 {
-    public class ContentController : Controller
+    public class NewsletterController : Controller
     {
         // GET: /<controller>/
         public IActionResult Index()
