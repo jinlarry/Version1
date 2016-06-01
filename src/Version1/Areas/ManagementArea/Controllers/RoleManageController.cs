@@ -5,11 +5,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Mvc;
 using Version1.Models;
-using Version1.ViewModels.Volunteer;
+using Version1.ViewModels.RoleManage;
 
 namespace Version1.Controllers
 {
-    public class RoleController : Controller
+    [Area("ManagementArea")]
+    public class RoleManageController : Controller
     {
         #region ================ variables ================
 
@@ -20,36 +21,67 @@ namespace Version1.Controllers
 
 
         // Constructor
-        public RoleController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public RoleManageController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
         }
 
-        // GET: /<controller>/
+        // GET: /Role/
+        // Main page of role controller
         public IActionResult Index()
         {
             return View();
         }
+
 
         #region  ================ Action: RoleManage ================
 
         // GET: /volunteer/RoleManage
         // Create and delete roles.
         [HttpGet]
-        public IActionResult RoleManage(RoleManageViewModel viewModel)
+        public IActionResult RoleManage()
         {
+            RoleManageViewModel viewModel = new RoleManageViewModel();
             viewModel.Roles = new List<IdentityRole>();
             viewModel.Roles = _roleManager.Roles.ToList<IdentityRole>();
 
             return View("RoleManage", viewModel);
         }
-        [HttpPost]
-        public IActionResult RoleManage()
-        {
 
-            return View("RoleManage");
+        [HttpPost]
+        public async Task<IActionResult> RoleManage(RoleManageViewModel viewModel)
+        {
+            IdentityRole role;
+
+            if(ModelState.IsValid)
+            {
+                if(viewModel.NewRoleNames != null)
+                {
+                    // create new roles
+                    foreach(var name in viewModel.NewRoleNames)
+                    {
+                        if(name != null)
+                        {
+                            await CreateRole(name);
+                        }
+                    }
+                }
+
+                if(viewModel.RemovedRoleNames != null)
+                {
+                    // remove roles
+                    foreach(var name in viewModel.RemovedRoleNames)
+                    {
+                        role = await _roleManager.FindByNameAsync(name);
+                        await _roleManager.DeleteAsync(role);
+                    }
+                }
+            }
+
+            return RedirectToAction("Index");
         }
+
         #endregion
 
 
@@ -148,7 +180,7 @@ namespace Version1.Controllers
         public IActionResult ProfileManage(ProfileManageViewModel viewModel)
         {
             return View();
-        } 
+        }
         #endregion
 
 

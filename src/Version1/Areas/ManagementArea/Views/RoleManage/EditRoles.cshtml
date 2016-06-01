@@ -49,7 +49,7 @@
         </tbody>
     </table>
 
-    <button id="submit" class="btn btn-default btnSubmit" type="submit">Save Roles</button>
+    <button id="submit" class="btn btn-default btnSubmit" role="button">Save Roles</button>
 </form>
 
 @section scripts{
@@ -67,7 +67,7 @@
                 }
             });
 
-            $('#submit').click(function (event) {
+            $('#formEditRole').on('click', '#submit', function (event) {
                 event.preventDefault();
 
                 // Create an array for value of the dict.
@@ -100,11 +100,11 @@
                     dict[userId] = listForChecks;
                 });
 
-                var postUrl = '/Volunteer/EditRoles';
+                var postUrl = '/ManagementArea/RoleManage/EditRoles';
 
                 // Post and return to the given view is there is nothing to return.
                 $.post(postUrl, { PostBackDict: dict, RoleNames: roleNames }, function (result) {
-                    window.location.assign('/Volunteer/RoleManage');
+                    window.location.assign("/ManagementArea/RoleManage/Index");
                 });
             });
         });

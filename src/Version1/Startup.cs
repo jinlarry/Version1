@@ -19,7 +19,7 @@ namespace Version1
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
+            if(env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
@@ -63,7 +63,7 @@ namespace Version1
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
+            if(env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
@@ -76,7 +76,7 @@ namespace Version1
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    using(var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                         .CreateScope())
                     {
                         serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
@@ -98,7 +98,11 @@ namespace Version1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Role}/{action=Index}/{param?}");
+                    template: "{controller=Home}/{action=Index}/{param?}");
+
+                routes.MapRoute(
+                    name: "Management",
+                    template: "{area:exists}/{controller=RoleManage}/{action=Index}/{param?}");
             });
         }
 

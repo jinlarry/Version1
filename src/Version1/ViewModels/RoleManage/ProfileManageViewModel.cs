@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Version1.ViewModels.Volunteer
+namespace Version1.ViewModels.RoleManage
 {
     public class ProfileManageViewModel
     {

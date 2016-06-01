@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Version1.ViewModels.Team
 {
-    public class TeamManageViewModel
+    public class EditTeamViewModel
     {
     }
 }

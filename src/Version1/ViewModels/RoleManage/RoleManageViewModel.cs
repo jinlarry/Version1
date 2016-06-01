@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Version1.Models;
 
-namespace Version1.ViewModels.Volunteer
+namespace Version1.ViewModels.RoleManage
 {
     public class RoleManageViewModel
     {
