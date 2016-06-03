@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Version1.Models;
 
-namespace Version1.Data.Migrations
+namespace Version1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -182,32 +182,14 @@ namespace Version1.Data.Migrations
 
             modelBuilder.Entity("Version1.Models.Team", b =>
                 {
-                    b.Property<string>("Id");
-
-                    b.Property<string>("TeamLeaderId");
-
-                    b.Property<string>("TeamName");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamLeaderId");
-
-                    b.ToTable("Teams");
-                });
-
-            modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
-                {
-                    b.Property<string>("UserId");
-
                     b.Property<string>("TeamId");
 
-                    b.HasKey("UserId", "TeamId");
+                    b.Property<string>("TeamName")
+                        .IsRequired();
 
-                    b.HasIndex("TeamId");
+                    b.HasKey("TeamId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TeamsMembersJoin");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -239,26 +221,6 @@ namespace Version1.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Version1.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Version1.Models.Team", b =>
-                {
-                    b.HasOne("Version1.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("TeamLeaderId");
-                });
-
-            modelBuilder.Entity("Version1.Models.TeamsMembersJoin", b =>
-                {
-                    b.HasOne("Version1.Models.Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Version1.Models.ApplicationUser")
