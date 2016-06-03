@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Version1.Models;
@@ -22,6 +22,7 @@ namespace Version1.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+
         private IServiceProvider _serviceProvider;
         private RoleManager<IdentityRole> _roleManager;
 
@@ -39,6 +40,60 @@ namespace Version1.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
             _serviceProvider = serviceProvider;
             _roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        }
+
+        // Get: /Account/Register
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Age = model.Age,
+                    PhoneNumber = model.PhoneNum
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if(result.Succeeded)
+                {
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                    // Send an email with this link
+                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    // await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+
+                    // Assign role newcomer to user who just signed up and return true if success.
+                    var isAssignSuccess = await AssignRole(user.Id, "volunteer");
+
+                    // There should be a logic if isAssignSuccess is false.
+                    // ...
+                    // ...
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation(3, "User created a new account with password.");
+
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+
+                AddErrors(result);
+            }
+            // If we got this far, something failed, redisplay form.
+            return View(model);
         }
 
         //
@@ -59,21 +114,21 @@ namespace Version1.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
+                if(result.RequiresTwoFactor)
                 {
                     return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 }
-                if (result.IsLockedOut)
+                if(result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
                     return View("Lockout");
@@ -120,23 +175,23 @@ namespace Version1.Controllers
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            if(info == null)
             {
                 return RedirectToAction(nameof(Login));
             }
 
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
                 return RedirectToLocal(returnUrl);
             }
-            if (result.RequiresTwoFactor)
+            if(result.RequiresTwoFactor)
             {
                 return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl });
             }
-            if (result.IsLockedOut)
+            if(result.IsLockedOut)
             {
                 return View("Lockout");
             }
@@ -145,7 +200,7 @@ namespace Version1.Controllers
                 // If the user does not have an account, then ask the user to create an account.
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
-                var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
             }
         }
@@ -157,25 +212,20 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-            if (User.IsSignedIn())
-            {
-                return RedirectToAction(nameof(ManageController.Index), "Manage");
-            }
-
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
                 var info = await _signInManager.GetExternalLoginInfoAsync();
-                if (info == null)
+                if(info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
+                    if(result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
@@ -194,12 +244,12 @@ namespace Version1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
+            if(userId == null || code == null)
             {
                 return View("Error");
             }
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
@@ -223,10 +273,10 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if(user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -270,18 +320,18 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
             var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
+            if(user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
             }
@@ -305,7 +355,7 @@ namespace Version1.Controllers
         public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
         {
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
@@ -321,30 +371,30 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendCode(SendCodeViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View();
             }
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
 
             // Generate the token and send it
             var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-            if (string.IsNullOrWhiteSpace(code))
+            if(string.IsNullOrWhiteSpace(code))
             {
                 return View("Error");
             }
 
             var message = "Your security code is: " + code;
-            if (model.SelectedProvider == "Email")
+            if(model.SelectedProvider == "Email")
             {
                 await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
             }
-            else if (model.SelectedProvider == "Phone")
+            else if(model.SelectedProvider == "Phone")
             {
                 await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
             }
@@ -360,7 +410,7 @@ namespace Version1.Controllers
         {
             // Require that the user has already logged in via username/password or external login
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
@@ -374,7 +424,7 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -383,11 +433,11 @@ namespace Version1.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account
             // will be locked out for a specified amount of time.
             var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
                 return RedirectToLocal(model.ReturnUrl);
             }
-            if (result.IsLockedOut)
+            if(result.IsLockedOut)
             {
                 _logger.LogWarning(7, "User account locked out.");
                 return View("Lockout");
@@ -399,11 +449,11 @@ namespace Version1.Controllers
             }
         }
 
-        #region Helpers
+        #region ================= Helpers =================
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach(var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
@@ -411,12 +461,12 @@ namespace Version1.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await _userManager.GetUserAsync(HttpContext.User);
         }
 
         private IActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            if(Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
@@ -427,112 +477,7 @@ namespace Version1.Controllers
         }
         #endregion
 
-        #region ======================= New Edited =======================
-
-        // Create new role.
-        // Get:  /Account/CreateRole
-        [HttpGet]
-        public IActionResult CreateRole()
-        {
-            return View();
-        }
-
-        // Post:  /Account/CreateRole
-        // Create new role.
-        [HttpPost]
-        public async Task<IActionResult> CreateRole(CreateRoleViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var isSuccess = await CreateRole(viewModel.RoleName);
-                if (isSuccess)
-                {
-                    // If all good, return to AllRoles view.
-                    return RedirectToAction("AllRoles");
-                }
-            }
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult AllRoles(AllRolesViewModel viewModel)
-        {
-            viewModel.Roles = _roleManager.Roles.ToList<IdentityRole>();
-
-            return View(viewModel);
-        }
-
-        // Get: /Account/Register
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Age = model.Age,
-                    PhoneNumber = model.PhoneNum
-                };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    // await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-
-                    // Assign role to user and return true if success.
-
-                    var isAssignSuccess = await AssignRole(user.Id, "volunteer");
-
-                    // There should be a logic if isAssignSuccess is false.
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
-                }
-
-                AddErrors(result);
-            }
-            // If we got this far, something failed, redisplay form.
-            return View(model);
-        }
-
-        // Call this method to create roles.
-        private async Task<bool> CreateRole(string roleName)
-        {
-            var roleExist = await _roleManager.RoleExistsAsync(roleName);
-
-            IdentityResult result;
-
-            if (roleExist == false)
-            {
-                result = await _roleManager.CreateAsync(new IdentityRole(roleName));
-                return result.Succeeded;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        #region ================= Methods =================
         // Call this method to assign role to volunteer.
         private async Task<bool> AssignRole(string userId, string roleName)
         {
@@ -540,11 +485,11 @@ namespace Version1.Controllers
 
             var roleExist = await _roleManager.RoleExistsAsync(roleName);
 
-            if (roleExist)
+            if(roleExist)
             {
                 var user = await _userManager.FindByIdAsync(userId);
 
-                if (user != null)
+                if(user != null)
                 {
                     await _userManager.AddToRoleAsync(user, roleName);
                     isSueecss = true;
@@ -552,7 +497,6 @@ namespace Version1.Controllers
             }
             return isSueecss;
         }
-
         #endregion
     }
 }

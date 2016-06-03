@@ -1,0 +1,95 @@
+﻿@model RoleManageViewModel
+<br />
+<h4>Role Manage</h4>
+<br />
+
+<form id="roleEditForm" class="form-horizontal" asp-controller="Volunteer" asp-action="RoleManage" role="form" method="post">
+    <div>
+        <ul style="max-width:500px" id="currentRoles" class="list-group">
+            @foreach(var role in Model.Roles)
+            {
+                <li class="list-group-item">
+                    <div class="currentRole col-md-6">@role.Name</div>
+                    <a href="#" class="linkRemoveRole">Remove This Role</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    @* Roles to be removed *@
+    <h4>Roles to be Removed</h4>
+    <ul style="max-width:500px" id="removedRoles" class="list-group"></ul>
+    <hr />
+
+    @*Roles to be created *@
+    <h4>Roles to be Create</h4>
+    <div id="addedRoles" class="form-group">
+        <div class="col-md-10">
+            <input class="addedRole form-control" type="text" name="newRoleNames" />
+        </div>
+    </div>
+    <hr />
+
+    <a id="btnAddNewRole" class="btn btn-default" role="button">Add New Role</a>
+    <a id="btnSave" class="btn btn-default" role="button">Save Changes</a>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        // when #btnAddNewRole click
+        $(document).ready(function () {
+            $('#btnAddNewRole').click(function (event) {
+                $('#addedRoles').append(
+                    '<div class="col-md-10">'
+                    + '<input class="addedRole form-control" type="text" name="newRoleNames" />'
+                    + '</div>');
+            });  // end of #btnAddNewRole click
+
+            // when .linkRemoveRole click
+            $('#currentRoles').on('click', '.linkRemoveRole', function (event) {
+                var roleName = $(this).siblings().text();
+                $(this).parentsUntil('#currentRoles').remove();
+                $('#removedRoles').append(
+                  '<li class="list-group-item">'
+                + '<div class="removedRole col-md-6">' + roleName + '</div>'
+                + '<a href="#" class="linkAddRoleBack">Add Role Back</a>'
+                + '</li>');
+            }); // end of .remove_field click
+
+            // when click the Add Role Back button
+            $('#removedRoles').on('click', '.linkAddRoleBack', function (event) {
+                var roleName = $(this).siblings().text();
+                $(this).parentsUntil('#removedRoles').remove();
+                $('#currentRoles').append(
+                '<li class="list-group-item">'
+                + '<div class="currentRole col-md-6">' + roleName + '</div>'
+                + '<a href="#" class="linkRemoveRole">Remove This Role</a>'
+                + '</li>');
+            });
+
+            // when click the save change button
+            $('#roleEditForm').on('click', '#btnSave', function (event) {
+                event.preventDefault();
+
+                var newRoleNames = new Object();
+                var removedRoleNames = new Object();
+
+                // add all new role names to newRoleNames from inputs have addedRole class
+                $('.addedRole').each(function (index) {
+                    newRoleNames[index] = $(this).val();
+                });
+
+                // add all removed role names to removedRoleNames from inputs have removedRole class
+                $('.removedRole').each(function (index) {
+                    removedRoleNames[index] = $(this).text();
+                });
+
+                var postUrl = "/ManagementArea/RoleManage/RoleManage";
+                $.post(postUrl, { NewRoleNames: newRoleNames, RemovedRoleNames: removedRoleNames }, function (result) {
+                    window.location.assign("/ManagementArea/RoleManage/Index");
+                });
+            });
+        });
+    </script>
+
+} @* End of section *@
