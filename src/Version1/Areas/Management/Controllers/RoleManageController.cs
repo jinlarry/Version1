@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Version1.Models;
 using Version1.ViewModels.RoleManage;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Version1.Controllers
 {
-    [Area("ManagementArea")]
+    [Area("Management")]
     public class RoleManageController : Controller
     {
         #region ================ variables ================

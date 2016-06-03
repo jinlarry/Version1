@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Version1.Models;
@@ -22,6 +22,7 @@ namespace Version1.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+
         private IServiceProvider _serviceProvider;
         private RoleManager<IdentityRole> _roleManager;
 
@@ -77,7 +78,7 @@ namespace Version1.Controllers
                     // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
 
                     // Assign role newcomer to user who just signed up and return true if success.
-                    var isAssignSuccess = await AssignRole(user.Id, "newcomer");
+                    var isAssignSuccess = await AssignRole(user.Id, "volunteer");
 
                     // There should be a logic if isAssignSuccess is false.
                     // ...
@@ -199,7 +200,7 @@ namespace Version1.Controllers
                 // If the user does not have an account, then ask the user to create an account.
                 ViewData["ReturnUrl"] = returnUrl;
                 ViewData["LoginProvider"] = info.LoginProvider;
-                var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
             }
         }
@@ -211,11 +212,6 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-            if(User.IsSignedIn())
-            {
-                return RedirectToAction(nameof(ManageController.Index), "Manage");
-            }
-
             if(ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
@@ -465,7 +461,7 @@ namespace Version1.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await _userManager.GetUserAsync(HttpContext.User);
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

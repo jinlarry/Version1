@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Version1.Models
 {
@@ -22,9 +19,6 @@ namespace Version1.Models
 
         [Required]
         public override string PhoneNumber { get; set; }
-
-        public List<TeamsMembersJoin> TeamsMembersJoins { get; set; }
-
     }
 
 }

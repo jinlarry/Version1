@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Version1.Models;
-using Version1.Services;
 using Version1.ViewModels.Manage;
+using Version1.Services;
 
 namespace Version1.Controllers
 {
@@ -70,10 +69,10 @@ namespace Version1.Controllers
         {
             ManageMessageId? message = ManageMessageId.Error;
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     message = ManageMessageId.RemoveLoginSuccess;
@@ -95,7 +94,7 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -113,7 +112,7 @@ namespace Version1.Controllers
         public async Task<IActionResult> EnableTwoFactorAuthentication()
         {
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 await _userManager.SetTwoFactorEnabledAsync(user, true);
                 await _signInManager.SignInAsync(user, isPersistent: false);
@@ -129,7 +128,7 @@ namespace Version1.Controllers
         public async Task<IActionResult> DisableTwoFactorAuthentication()
         {
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 await _userManager.SetTwoFactorEnabledAsync(user, false);
                 await _signInManager.SignInAsync(user, isPersistent: false);
@@ -154,15 +153,15 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 var result = await _userManager.ChangePhoneNumberAsync(user, model.PhoneNumber, model.Code);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddPhoneSuccess });
@@ -180,10 +179,10 @@ namespace Version1.Controllers
         public async Task<IActionResult> RemovePhoneNumber()
         {
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 var result = await _userManager.SetPhoneNumberAsync(user, null);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.RemovePhoneSuccess });
@@ -206,15 +205,15 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User changed their password successfully.");
@@ -240,16 +239,16 @@ namespace Version1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(model);
             }
 
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            if(user != null)
             {
                 var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.SetPasswordSuccess });
@@ -270,7 +269,7 @@ namespace Version1.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
             var user = await GetCurrentUserAsync();
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
@@ -292,8 +291,8 @@ namespace Version1.Controllers
         {
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
-            return new ChallengeResult(provider, properties);
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
+            return Challenge(properties, provider);
         }
 
         //
@@ -302,12 +301,12 @@ namespace Version1.Controllers
         public async Task<ActionResult> LinkLoginCallback()
         {
             var user = await GetCurrentUserAsync();
-            if (user == null)
+            if(user == null)
             {
                 return View("Error");
             }
-            var info = await _signInManager.GetExternalLoginInfoAsync(User.GetUserId());
-            if (info == null)
+            var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
+            if(info == null)
             {
                 return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.Error });
             }
@@ -320,7 +319,7 @@ namespace Version1.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach(var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
@@ -338,9 +337,9 @@ namespace Version1.Controllers
             Error
         }
 
-        private async Task<ApplicationUser> GetCurrentUserAsync()
+        private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return _userManager.GetUserAsync(HttpContext.User);
         }
 
         #endregion
