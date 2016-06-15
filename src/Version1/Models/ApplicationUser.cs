@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -15,10 +16,12 @@ namespace Version1.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        public int Age { get; set; }
-
         [Required]
         public override string PhoneNumber { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
+
+
     }
 
 }

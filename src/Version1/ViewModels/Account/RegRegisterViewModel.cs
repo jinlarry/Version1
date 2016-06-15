@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Version1.ViewModels.Account
 {
-    public class RegisterViewModel
+    public class RegRegisterViewModel
     {
         #region ============== New Edited ============== 
 
@@ -23,8 +23,8 @@ namespace Version1.ViewModels.Account
         public string LastName { get; set; }
 
         [Required]
-        [RegularExpression(pattern: @"\d+", ErrorMessage = "Please enter digits.")]
-        public int Age { get; set; }
+        [Display(Name ="Date of birth")]
+        public DateTime DateOfBirth { get; set; }
 
         [Required]
         [RegularExpression(pattern: @"\d+", ErrorMessage = "Please enter digits.")]

@@ -1,5 +1,153 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
+@section styles{
+    <style>
+        .single_team {
+            padding: 6px;
+            position: relative;
+            max-height: 400px;
+            max-width: 590px;
+        }
+
+        .team_img {
+           height: 280px;
+            width: 570px;
+        }
+
+        .overlay {
+            position: absolute;
+            visibility: visible;
+            top: 10%;
+            bottom: 10%;
+            padding-top:10%;
+            padding-left: 20%;
+            padding-right: 20%;
+            margin-right: 1.5%;
+            opacity: 0;
+        }
+
+        .single_team:hover .overlay {
+            background-color: #808080;
+            opacity: 0.8;
+            transition: all 200ms;
+        }
+
+        .captionlink {
+            background: #0094ff;
+            width: 100%;
+            display: block;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+        }
+
+        .single_team:hover .team_img {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            transition: all 200ms;
+        }
+
+        /*.fixed_sponsor {
+            position: fixed;
+            top: 10%;
+            right: 5%;
+            width: 180px;
+            height: 180px;
+            background: #128b98;
+            color: #fff;
+            border-radius: 50%;
+            padding: 50px 30px;
+
+        }*/
+    </style>
+
+
+
 }
+
+<div id="all_teams" class="container">
+    <div class="row">
+        <h1 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">ALL TEAMS</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/team_neighbour.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/vase_3a.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/vase_1a.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/vase_3a.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/vase_6a.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 single_team">
+            <a href="#">
+                <img class="img-responsive team_img" src="~/images/vase_1a.jpg" alt="vase" />
+                <div class="overlay">
+                    <span class="team_info">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Aenean consectetur ante volutpat sem aliquam lobortis.
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

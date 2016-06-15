@@ -15,39 +15,9 @@ namespace Version1.Controllers
             return View();
         }
 
-
-        #region ================ Action: TeamManage ================
-
-        [HttpGet]
-        public IActionResult TeamManage()
+        public IActionResult TeamDetail(string param)
         {
             return View();
         }
-
-        [HttpPost]
-        public IActionResult TeamManage(TeamManageViewModel viewModel)
-        {
-            return View();
-        }
-
-        #endregion
-
-
-        #region ================ Action: EditTeam ================
-
-        // Team/EditTeam/<Team ID>
-        [HttpGet]
-        public IActionResult EditTeam(string param)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EditTeam(EditTeamViewModel viewModel)
-        {
-            return View();
-        }
-
-        #endregion
     }
 }

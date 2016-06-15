@@ -8,8 +8,8 @@ using Version1.Models;
 namespace Version1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160603030906_ini2")]
-    partial class ini2
+    [Migration("20160608084410_ini1")]
+    partial class ini1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,10 +130,10 @@ namespace Version1.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<int>("Age");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Email")
                         .HasAnnotation("MaxLength", 256);
@@ -165,6 +165,8 @@ namespace Version1.Migrations
 
                     b.Property<string>("SecurityStamp");
 
+                    b.Property<string>("TeamId");
+
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
@@ -178,7 +180,27 @@ namespace Version1.Migrations
                     b.HasIndex("NormalizedUserName")
                         .HasName("UserNameIndex");
 
+                    b.HasIndex("TeamId");
+
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Version1.Models.Team", b =>
+                {
+                    b.Property<string>("TeamId");
+
+                    b.Property<string>("TeamLeaderId");
+
+                    b.Property<string>("TeamLeaderName");
+
+                    b.Property<string>("TeamName")
+                        .IsRequired();
+
+                    b.HasKey("TeamId");
+
+                    b.HasIndex("TeamLeaderId");
+
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -216,6 +238,20 @@ namespace Version1.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Version1.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Version1.Models.Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+                });
+
+            modelBuilder.Entity("Version1.Models.Team", b =>
+                {
+                    b.HasOne("Version1.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("TeamLeaderId");
                 });
         }
     }

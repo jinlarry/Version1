@@ -100,12 +100,12 @@ namespace Version1
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{param?}");
+                   name: "Management",
+                   template: "{area:exists}/{controller=RoleManage}/{action=Index}/{param?}");
 
                 routes.MapRoute(
-                    name: "Management",
-                    template: "{area:exists}/{controller=RoleManage}/{action=Index}/{param?}");
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{param?}");
             });
         }
     }

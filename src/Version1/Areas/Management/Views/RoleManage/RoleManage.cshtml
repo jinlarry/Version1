@@ -84,9 +84,9 @@
                     removedRoleNames[index] = $(this).text();
                 });
 
-                var postUrl = "/ManagementArea/RoleManage/RoleManage";
+                var postUrl = "/Management/RoleManage/RoleManage";
                 $.post(postUrl, { NewRoleNames: newRoleNames, RemovedRoleNames: removedRoleNames }, function (result) {
-                    window.location.assign("/ManagementArea/RoleManage/Index");
+                    window.location.assign("/Management/RoleManage/Index");
                 });
             });
         });

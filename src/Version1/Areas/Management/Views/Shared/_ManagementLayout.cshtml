@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Version1</title>
+    <title>@ViewData["Title"] - Southalive</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/management_site.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -26,25 +26,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Version1</a>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Southalive</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            Home <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </li>
-                    <li><a asp-controller="Team" asp-action="Index">Team</a></li>
-                    <li><a asp-controller="Venue" asp-action="Index">Venue</a></li>
-                    <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
-                    <li><a asp-controller="ZeroRubbish" asp-action="Index">ZeroRubbish</a></li>
+                    <li><a asp-controller="RoleManage" asp-action="Index">Main Management</a></li>
+                    <li><a asp-controller="#" asp-action="Index">Page</a></li>
+                    <li><a asp-controller="#" asp-action="Index">Page</a></li>
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
