@@ -1,86 +1,79 @@
-﻿@model RegRegisterViewModel
+﻿@model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
 }
-@section styles{
-    <style>
-        #regForm {
-            width: 50%;
-        }
-    </style>
-}
 
 <h2>@ViewData["Title"]</h2>
-<div>
-    <form id="regForm" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
-        <h4>Create a new account.</h4>
-        <hr />
 
-        <div asp-validation-summary="All" class="text-danger"></div>
+<form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form" style="width:50%;margin-left:10%">
+    <h4>Create a new account.</h4>
+    <hr />
 
-        <div class="form-group">
-            <label asp-for="FirstName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="FirstName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="LastName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="LastName" type="datetime" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="DateOfBirth" class="col-md-2 control-label"></label>
-            <div id="DateOfBirth" class="col-md-10">
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="Age" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="PhoneNum" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PhoneNum" class="form-control" />
-                <span asp-validation-for="PhoneNum" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="PhoneNum" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PhoneNum" class="form-control" />
+            <span asp-validation-for="PhoneNum" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="Password" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="Password" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-default">Register</button>
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Register</button>
         </div>
-    </form>
-</div>
+    </div>
+</form>
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

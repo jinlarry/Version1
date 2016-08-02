@@ -1,0 +1,54 @@
+@model IEnumerable<Events>
+
+<h2>Events</h2>
+
+<p>
+    <a sp-area="Management" asp-controller="Events" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.event_address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.event_datetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.event_name)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.event_profile)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.event_address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.event_datetime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.event_name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.event_profile)
+                </td>
+
+                <td>
+                    <a sp-area="Management" asp-controller="Events" asp-action="Edit" asp-route-id="@item.event_ID">Edit</a> |
+                    <a sp-area="Management" asp-controller="Events" asp-action="Details" asp-route-id="@item.event_ID">Details</a> |
+                    <a sp-area="Management" asp-controller="Events" asp-action="Delete" asp-route-id="@item.event_ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

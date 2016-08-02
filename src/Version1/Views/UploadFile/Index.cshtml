@@ -1,0 +1,37 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_FrontEndLayout.cshtml";
+}
+
+<form asp-action="UploadPortraitFileAjax" asp-controller="UploadFile" asp-route-id="@TempData["action"]" method="post" enctype="multipart/form-data">
+    <br>
+
+    <input type="file" id="files" value="Open file" title="Open file" name="files" multiple />
+
+    <input type="submit" value="Upload Selected Files" />
+</form>
+<script>
+    $(document).ready(function () {
+        $("#upload").click(function (evt) {
+            var fileUpload = $("#files").get(0);
+            var files = fileUpload.files;
+            var data = new FormData();
+            for (var i = 0; i < files.length ; i++) {
+                data.append(files[i].name, files[i]);
+            }
+            $.ajax({
+                type: "POST",
+                url: "/home/UploadFilesAjax",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (message) {
+                    // alert(message);
+                },
+                error: function () {
+                    //  alert("There was error uploading files!");
+                }
+            });
+        });
+    });</script>

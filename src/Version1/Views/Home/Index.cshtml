@@ -1,5 +1,7 @@
 ﻿<!-- Image Background Page Header -->
 <!-- Note: The background image is set within the business-casual.css file. -->
+@model HomeIndexViewModel
+
 @section styles{
     <style>
         #div_images {
@@ -27,8 +29,9 @@
         #div_events {
             margin-top: 30px;
             color: white;
-            background-color: gold;
+            background-color: #76c49e;
             text-align: center;
+            padding-bottom: 30px;
         }
 
         .event_info {
@@ -39,19 +42,22 @@
         }
 
         #div_sponsors {
-            margin-top: 40px;
+            margin: 0;
+            background-color: blanchedalmond;
+        }
+        hr{
+            
         }
     </style>
+
 }
 
 <header class="business-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12" style="margin-top:15%">
                 <h1 class="tagline">Business Name or Tagline</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <p>Et molestiae similique eligendi reiciendis sunt distinctio odit?</p>
-                <p>Quia, neque, ipsa, adipisci quisquam</p>
+                <p>"A vibrant and diverse community that takes the lead in its own future.."</p>
             </div>
         </div>
     </div>
@@ -91,69 +97,47 @@
             <h1 class="text-center">Recent events</h1>
             <h5 class="text-center"><em>ipsum dolor sit amet consectetur.</em></h5>
         </div>
-        <div class="row" style="margin-bottom:30px">
+        <br />
+        @foreach(var e in Model.Events)
+        {
             <div class="col-md-3">
-                <img class="img-responsive" src="~/images/placeholder.png" />
+                <img class="img-responsive" style="width:690px;height:200px" src="~/images/Events/@e.event_picture" />
                 <div class="event_info">
-                    <strong><i>Event One</i></strong>
-                    <address>Ythan Street, Appleby, Invercargill</address>
-                    <p><i>ipsum dolor sit amet,ipsum dolor sit amet,ipsum dolor sit amet</i></p>
+                    <strong><i>@e.event_name</i></strong>
+                    <address>@e.event_address</address>
+                    <strong>@e.event_datetime.ToString()</strong>
+                    <p><i>@e.event_profile</i></p>
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <img class="img-responsive" src="~/images/placeholder.png" />
-                <div class="event_info">
-                    <strong><i>Event Two</i></strong>
-                    <address>Ythan Street, Appleby, Invercargill</address>
-                    <p><i>ipsum dolor sit amet,ipsum dolor sit amet,ipsum dolor sit amet</i></p>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <img class="img-responsive" src="~/images/placeholder.png" />
-                <div class="event_info">
-                    <strong><i>Event Two</i></strong>
-                    <address>Ythan Street, Appleby, Invercargill</address>
-                    <p><i>ipsum dolor sit amet,ipsum dolor sit amet,ipsum dolor sit amet</i></p>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <img class="img-responsive" src="~/images/placeholder.png" />
-                <div class="event_info">
-                    <strong><i>Event Two</i></strong>
-                    <address>Ythan Street, Appleby, Invercargill</address>
-                    <p><i>ipsum dolor sit amet,ipsum dolor sit amet,ipsum dolor sit amet</i></p>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
-<div id="div_sponsors" class="container">
-    <h1 class="text-center">Sponsors</h1>
-    <div id="div_images" class="row">
-        <div class="row">
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/ctoslogo.png" alt="Alternate Text" />
+<div id="div_sponsors">
+    <div class="container">
+        <h1 class="text-center">Sponsors</h1>
+        <div id="div_images" class="row">
+            <div class="row">
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/ctoslogo.png" alt="Alternate Text" />
+                </div>
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
+                </div>
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/pocock.png" alt="Alternate Text" />
+                </div>
             </div>
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
-            </div>
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/pocock.png" alt="Alternate Text" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/southroadslogo.png" alt="Alternate Text" />
-            </div>
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/icclogo.png" alt="Alternate Text" />
-            </div>
-            <div class="col-md-4 div_image">
-                <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
+            <div class="row">
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/southroadslogo.png" alt="Alternate Text" />
+                </div>
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/icclogo.png" alt="Alternate Text" />
+                </div>
+                <div class="col-md-4 div_image">
+                    <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
+                </div>
             </div>
         </div>
     </div>

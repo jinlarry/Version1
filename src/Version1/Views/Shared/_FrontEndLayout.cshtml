@@ -39,18 +39,12 @@
                             <li><a href="#">About</a></li>
                         </ul>
                     </li>
-
                     <li class="dropdown">
-                        @*<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Teams
-                                <span class="caret"></span>
-                            </a>*@
-
-                        <a href="#" style="display:inline-block;padding-right:0;">Teams</a>
+                        <a href="/team" style="display:inline-block;padding-right:0;">Teams</a>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="display:inline-block;padding-left:0px">
-                            <span class="caret"></span>
+                            @*<span class="caret"></span>*@
                         </a>
-                        <ul class="dropdown-menu">
+                        @*<ul class="dropdown-menu">
                             <li><a href="#">Children &amp; Youth</a></li>
                             <li><a href="#">South City</a></li>
                             <li><a href="#">Stronger Neighbourhoods</a></li>
@@ -60,12 +54,11 @@
                             <li><a href="#">Fruit &amp; Nut Trees</a></li>
                             <li><a href="#">Marketing &amp; Events</a></li>
                             <li><a href="#">Dog Park</a></li>
-                        </ul>
+                        </ul>*@
                     </li>
-
-                    <li><a asp-controller="#" asp-action="Index">Venue</a></li>
-                    <li><a asp-controller="#" asp-action="Index">ZeroRubbish</a></li>
-                    <li><a asp-controller="#" asp-action="Index">Gallery</a></li>
+                    @*<li><a asp-controller="#" asp-action="Index">Venue</a></li>*@
+                    @*<li><a asp-controller="#" asp-action="Index">ZeroRubbish</a></li>*@
+                    <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -73,7 +66,7 @@
     </div>
     <div class="body-content">
         @RenderBody()
-        <hr />
+       
     </div>
 
     <footer>

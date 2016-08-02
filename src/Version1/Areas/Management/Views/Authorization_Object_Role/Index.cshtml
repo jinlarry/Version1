@@ -1,0 +1,97 @@
+@model Authorization_Object_Role_ViewModel
+
+<h1>Configuration of Authorization Objects and User Roles</h1>
+
+@*<a asp-area="Management" asp-controller="Authorization_Object" asp-action="Index" target="_blank">Management of Objects</a>&nbsp&nbsp*@
+<a asp-area="Management" asp-controller="Authorization_Object" asp-action="Create" target="_blank">Add New Object to Authorize</a>
+<form class="form-horizontal" id="formAuthorizationUpdate" asp-route-area="management" asp-controller="Authorization_Object_Role" asp-action="Update" method="post" role="form">
+
+    <table id="tblUsersRoles" class="table">
+        <thead>
+            <tr>
+                <th>All Authorization Objects \ All Roles</th>
+                @foreach(var role in Model.Roles)
+                {
+                    <th>
+                        @role.Name
+                        <input value="@role.Name " hidden />
+                    </th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var item in Model.Authorization_Object)
+            {
+                <tr>
+                    <td>
+                        <a asp-route-area="management" asp-controller="Authorization_Object" asp-action="Details" asp-route-id="@item.ID" target="_blank">@item.ObjectName</a>
+
+                        @* this value will be insert in the dict as a key *@
+                        <input value="@item.ID" hidden />
+                    </td>
+                    @foreach(var val in Model.Roles)
+                    {
+                        <td>
+                            @if(Model.AuthorizationDone.Where(p => p.RoleID == val.Id).Where(p => p.Authorization_Object_ID == @item.ID).ToList().Count > 0)
+                            {
+                                <div class="btneditAuthorization btn btn-sm glyphicon glyphicon-ok" role="checkbox" value="true" itemid="@val.Id" name="@item.ID"></div>
+                            }
+                            else
+                            {
+                                <div class="btneditAuthorization btn btn-sm glyphicon glyphicon-remove" role="checkbox" value="false" itemid="@val.Id" name="@item.ID"></div>
+                            }
+
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button id="submit" class="btn btn-default btnSubmit" role="button">Save Configuration</button>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.btneditAuthorization').click(function (event) {
+                event.preventDefault();
+                if ($(this).attr('value') == 'true') {
+                    $(this).attr('value', 'false');
+                    $(this).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+                }
+                else if ($(this).attr('value') == 'false') {
+                    $(this).attr('value', 'true');
+                    $(this).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#formAuthorizationUpdate').on('click', '#submit', function (event) {
+                event.preventDefault();
+                var dict = [];
+                $('.btneditAuthorization').each(function (index) {
+                    if ($(this).attr('value') == 'true') {
+                        var item = { RoleID: $(this).attr('itemid'), Authorization_Object_ID: $(this).attr('name') };
+                        dict.push(item);
+                    }
+                    else { }
+                });
+                var postUrl = '/Management/Authorization_Object_Role/Update';
+                // Post and return to the given view is there is nothing to return.
+                $.post(postUrl, { AuthorizationDone: dict }, function (result) {
+                    window.location.assign("/Management/Authorization_Object_Role/Index");
+                    alert('You have finished change!');
+                });
+
+            });
+        });
+
+    </script>
+
+}

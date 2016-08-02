@@ -54,7 +54,7 @@ namespace Version1.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegRegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace Version1.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    DateOfBirth = model.DateOfBirth,
+                    Age = model.Age,
                     PhoneNumber = model.PhoneNum
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);

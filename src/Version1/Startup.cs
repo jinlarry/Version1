@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using Version1.Models;
 using Version1.Services;
 
@@ -13,15 +14,17 @@ namespace Version1
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        // public Startup(IHostingEnvironment env)IHostingEnvironment hostingEnv
+        public Startup(IHostingEnvironment hostingEnv)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
+                 //  .SetBasePath(env.ContentRootPath)
+                 .SetBasePath(hostingEnv.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{hostingEnv.EnvironmentName}.json", optional: true);
 
-            if(env.IsDevelopment())
+            if(hostingEnv.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
@@ -49,13 +52,13 @@ namespace Version1
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
 
+            services.AddSession();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -92,6 +95,7 @@ namespace Version1
             }
 
             app.UseStaticFiles();
+            app.UseSession(new SessionOptions { IdleTimeout = TimeSpan.FromMinutes(60) });
 
             app.UseIdentity();
 
@@ -104,8 +108,8 @@ namespace Version1
                    template: "{area:exists}/{controller=RoleManage}/{action=Index}/{param?}");
 
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{param?}");
+                  name: "default",
+                  template: "{controller=Home}/{action=Index}/{param?}");
             });
         }
     }

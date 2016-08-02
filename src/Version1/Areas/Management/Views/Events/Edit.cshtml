@@ -1,0 +1,96 @@
+@model Events
+
+@{
+    ViewData["Title"] = "Edit";
+
+}
+
+<h2>Edit</h2>
+
+<form sp-area="Management" asp-controller="Events" asp-route-id="@Model.event_ID" asp-action="Edit">
+    <input type="hidden" asp-for="event_ID" />
+    <input type="hidden" asp-for="event_picture" value="@Model.event_picture" />
+    <table>
+        <tr>
+            <td>
+                <div class="form-horizontal">
+                    <h4>Events</h4>
+                    <hr />
+                    <div class="form-group">
+                        <label asp-for="event_name" class="col-md-2 control-label">Activity Name</label>
+                        <div class="col-md-10">
+                            <input asp-for="event_name" class="form-control" />
+                            <span asp-validation-for="event_name" class="text-danger" />
+                        </div>
+                    </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="event_ID" />
+                    <div class="form-group">
+                        <label asp-for="event_address" class="col-md-2 control-label">Activity Address</label>
+                        <div class="col-md-10">
+                            <input asp-for="event_address" class="form-control" />
+                            <span asp-validation-for="event_address" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="event_datetime" class="col-md-2 control-label">Activity Date</label>
+                        <div class="col-md-10">
+
+                            <input asp-for="event_datetime" id="StartDate" type="date" value="@Model.event_datetime">
+                            <span asp-validation-for="event_datetime" class="text-danger" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="event_profile" class="col-md-2 control-label">Profile</label>
+                        <div class="col-md-10">
+                            <textarea asp-for="event_profile" class="form-control" id="Description"
+                                      data-val-required="The Description field is required."
+                                      data-val-maxlength-max="5000"
+                                      data-val-maxlength="The field Description must be a string or array type with a maximum length of '5000'."></textarea>
+
+                            <span asp-validation-for="event_profile" class="text-danger" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <dl>
+                        <dt>
+                            Activity Photo
+                        </dt>
+                        <dd>
+                            @{ if(Model.event_picture != null)
+                                {
+                                    <img src="~/images/Events/@Model.event_picture" align="left" height="210" width="190" display=inline>
+                                }
+                                else
+                                {
+                                    <img src="~/images/Events/default.jpg" align="left" height="210" width="190" display=inline>
+                                }
+                            }
+                        </dd>
+                        <dd><a style="text-align:left" asp-area="default" asp-controller="UploadFile" asp-route-id="Management/Events/Edit" asp-route-eventID="@Model.event_ID" asp-action="Index"> Edit Activity Photo</a></dd>
+                    </dl>
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<div>
+    <a sp-area="Management" asp-controller="Events" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

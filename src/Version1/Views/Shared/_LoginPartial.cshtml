@@ -14,6 +14,13 @@
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
             </li>
+
+            @if(User.IsInRole("manager"))
+            {
+                <li>
+                    <a asp-controller="Management">Go To Managment</a>
+                </li>
+            }
         </ul>
     </form>
 }
