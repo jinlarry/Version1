@@ -1,0 +1,51 @@
+@model Team
+
+<form class="form-horizontal" asp-area="Management" asp-controller="TeamManage" asp-route-id=@Model.TeamId asp-action="Edit">
+    <h4>Edit Team</h4>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="TeamId" />
+
+    <div class="form-group">
+        <label asp-for="TeamName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="TeamName" class="form-control" />
+            <span asp-validation-for="TeamName" class="text-danger" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <dl>
+            <dt>
+                Activity Photo
+            </dt>
+            <dd>
+                @{ if(Model.TeamImage != null)
+                    {
+                        <img src="~/images/Teams/@Model.TeamImage" align="left" height="210" width="190" display=inline>
+                    }
+                    else
+                    {
+                        <img src="~/images/Teams/default.jpg" align="left" height="210" width="190" display=inline>
+                    }
+                }
+            </dd>
+            <dd><a style="text-align:left" asp-area="default" asp-controller="UploadFile" asp-route-id="Management/TeamManage/Edit" asp-route-TeamID="@Model.TeamId" asp-action="Index"> Edit Activity Photo</a></dd>
+        </dl>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-area="Management" asp-controller="TeamManage" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

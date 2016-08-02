@@ -1,0 +1,62 @@
+@model IEnumerable<Version1.Models.Authorization_Object>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+  <!-- <a  asp-route-area="management" asp-action="/Management/Authorization_Object/Create">Create New</a>-->
+
+    <a class="btn btn-default" href="/Management/Authorization_Object/Create">Create</a>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullControllerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ObjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ObjectType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullControllerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ObjectDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

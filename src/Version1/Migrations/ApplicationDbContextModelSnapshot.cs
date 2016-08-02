@@ -162,6 +162,8 @@ namespace Version1.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("Portrait");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -180,9 +182,92 @@ namespace Version1.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Version1.Models.Authorization_Object", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ActionName")
+                        .HasAnnotation("MaxLength", 150);
+
+                    b.Property<string>("FullControllerName")
+                        .HasAnnotation("MaxLength", 150);
+
+                    b.Property<string>("ObjectDescription");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 200);
+
+                    b.Property<string>("ObjectType")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Authorization_Object");
+                });
+
+            modelBuilder.Entity("Version1.Models.Authorization_Object_Role", b =>
+                {
+                    b.Property<int>("Authorization_Object_ID");
+
+                    b.Property<string>("RoleID");
+
+                    b.HasKey("Authorization_Object_ID", "RoleID");
+
+                    b.HasIndex("Authorization_Object_ID", "RoleID");
+
+                    b.ToTable("Authorization_Object_Role");
+                });
+
+            modelBuilder.Entity("Version1.Models.Events", b =>
+                {
+                    b.Property<string>("event_ID");
+
+                    b.Property<string>("event_address");
+
+                    b.Property<DateTime>("event_datetime");
+
+                    b.Property<string>("event_name");
+
+                    b.Property<string>("event_picture");
+
+                    b.Property<string>("event_profile");
+
+                    b.Property<string>("teamid");
+
+                    b.HasKey("event_ID");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Version1.Models.Newsletter", b =>
+                {
+                    b.Property<string>("NewsletterId");
+
+                    b.Property<string>("Detail");
+
+                    b.Property<string>("ImagePath");
+
+                    b.Property<string>("NewsletterName");
+
+                    b.Property<DateTime>("PublishDate");
+
+                    b.HasKey("NewsletterId");
+
+                    b.ToTable("Newsletters");
+                });
+
             modelBuilder.Entity("Version1.Models.Team", b =>
                 {
                     b.Property<string>("TeamId");
+
+                    b.Property<string>("TeamDescription");
+
+                    b.Property<string>("TeamImage");
+
+                    b.Property<string>("TeamLeaderID");
 
                     b.Property<string>("TeamName")
                         .IsRequired();
@@ -190,6 +275,21 @@ namespace Version1.Migrations
                     b.HasKey("TeamId");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("Version1.Models.TeamMember", b =>
+                {
+                    b.Property<string>("TeamId");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("TeamId", "UserID");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -226,6 +326,19 @@ namespace Version1.Migrations
                     b.HasOne("Version1.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Version1.Models.TeamMember", b =>
+                {
+                    b.HasOne("Version1.Models.Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Version1.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

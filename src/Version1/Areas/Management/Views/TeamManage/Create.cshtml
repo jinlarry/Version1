@@ -1,0 +1,52 @@
+@model Team
+
+<form asp-area="Management" asp-controller="TeamManage" asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Team</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="TeamName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TeamName" class="form-control" />
+                <span asp-validation-for="TeamName" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <a style="text-align:left" class="col-md-7 control-label" asp-area="default" asp-controller="UploadFile" asp-route-id="Management/TeamManage/Create" asp-action="Index"> Upload Activity Photo</a>
+            <div class="col-md-7" style="align-content:center">
+                @{if(TempData["photoaddress"] != null)
+                    {
+                        <img src="~/images/Teams/@TempData["photoaddress"].ToString()" align="left" width="300" height="500" display=inline>
+                        <input type="hidden" asp-for="TeamImage" value="@TempData["photoaddress"].ToString()" class="form-control" />
+                    }
+                    else
+                    {
+                        <img src="~/images/Teams/default.jpg" align="left" width="300" height="500" display=inline>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="TeamDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TeamDescription" class="form-control" />
+                <span asp-validation-for="TeamDescription" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-area="Management" asp-controller="TeamManage" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

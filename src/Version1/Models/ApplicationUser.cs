@@ -18,7 +18,13 @@ namespace Version1.Models
         public int Age { get; set; }
 
         [Required]
+        [Display(Name = "Phone Number")]
         public override string PhoneNumber { get; set; }
+
+        public List<TeamMember> TeamMembers { get; set; }
+
+        public string Portrait { get; set; }
     }
 
 }
+

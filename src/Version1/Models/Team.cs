@@ -8,10 +8,15 @@ namespace Version1.Models
 {
     public class Team
     {
-        [Key]
         public string TeamId { get; set; }
 
         [Required]
         public string TeamName { get; set; }
+        public string TeamLeaderID { get; set; }
+        public List<TeamMember> TeamMembers { get; set; }
+
+        public string TeamDescription { get; set; }
+
+        public string TeamImage { get; set; }
     }
 }
