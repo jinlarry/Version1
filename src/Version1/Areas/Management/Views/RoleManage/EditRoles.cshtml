@@ -1,8 +1,8 @@
 ﻿@model EditRolesViewModel
 
-<h1>Edit roles</h1>
+<h1>Matching users and roles</h1>
 
-<form class="form-horizontal" id="formEditRole" asp-controller="Volunteer" asp-action="EditRoles" method="post" role="form">
+<form class="form-horizontal" id="formEditRole" asp-route-area="management" asp-controller="Volunteer" asp-action="EditRoles" method="post" role="form">
 
     <input id="Roles" value="@Model.Roles" hidden />
 
@@ -100,11 +100,11 @@
                     dict[userId] = listForChecks;
                 });
 
-                var postUrl = '/ManagementArea/RoleManage/EditRoles';
+                var postUrl = '/Management/RoleManage/EditRoles';
 
                 // Post and return to the given view is there is nothing to return.
                 $.post(postUrl, { PostBackDict: dict, RoleNames: roleNames }, function (result) {
-                    window.location.assign("/ManagementArea/RoleManage/Index");
+                    window.location.assign("/Management/RoleManage/Index");
                 });
             });
         });

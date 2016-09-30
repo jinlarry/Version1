@@ -1,11 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Version1.Models
-
+@using Version1.Services
+@using Microsoft.Extensions.Options
+ 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IOptions<AppParameterSettings> Settings
 
-@if(SignInManager.IsSignedIn(User))
-{
+ @if (SignInManager.IsSignedIn(User))
+ {
     <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -13,14 +16,33 @@
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
-            </li>
+            </li>@*User.IsInRole("System Administrator")*@
+           @{ //原理： 用户角色可能有多个，配置文件中设置的能使用后台功能所对应的角色也可能是多个，两个角色集中只要有任意一个角色一致则此用户可使用后台功能。首先遍历所有用户角色
+               foreach (var pp in User.Claims)
+               {
+                   if (pp.Type.Contains("/claims/role")) //约束真，才是真的role值
+                   {
+                       string temp = pp.Value.ToString();
+                       if (Settings.Value.ManagementRoles.Contains(temp)) //查找Appsettings.json 配置文件中的ManagementRoles（其中包含所有可以使用后台功能的集合）集合中是否包含指定角色 注意区分大小写
+                       {
+                          <li>
+                            <a asp-controller="Management">Go To Managment</a>
+                          </li>
+                           break;
+                       }
+
+                   }
+               }
+        }
+
+              
         </ul>
     </form>
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+        <li><a asp-controller="Account" asp-action="Register">Join Us !</a></li>
         <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }

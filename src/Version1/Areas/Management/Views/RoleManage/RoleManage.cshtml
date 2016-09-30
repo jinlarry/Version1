@@ -3,7 +3,7 @@
 <h4>Role Manage</h4>
 <br />
 
-<form id="roleEditForm" class="form-horizontal" asp-controller="Volunteer" asp-action="RoleManage" role="form" method="post">
+<form id="roleEditForm" class="form-horizontal" asp-route-area="management" asp-controller="Volunteer" asp-action="RoleManage" role="form" method="post">
     <div>
         <ul style="max-width:500px" id="currentRoles" class="list-group">
             @foreach(var role in Model.Roles)
@@ -40,8 +40,9 @@
         $(document).ready(function () {
             $('#btnAddNewRole').click(function (event) {
                 $('#addedRoles').append(
-                    '<div class="col-md-10">'
+                    '<div class="col-md-10 addedRole">'
                     + '<input class="addedRole form-control" type="text" name="newRoleNames" />'
+                    + '<a class="removeCurrentRow" href="">Remove This Role</a>'
                     + '</div>');
             });  // end of #btnAddNewRole click
 
@@ -84,11 +85,16 @@
                     removedRoleNames[index] = $(this).text();
                 });
 
-                var postUrl = "/ManagementArea/RoleManage/RoleManage";
+                var postUrl = "/Management/RoleManage/RoleManage";
                 $.post(postUrl, { NewRoleNames: newRoleNames, RemovedRoleNames: removedRoleNames }, function (result) {
-                    window.location.assign("/ManagementArea/RoleManage/Index");
+                    window.location.assign("/Management/RoleManage/Index");
                 });
             });
+
+            //$('#addedRoles').on('clikc', '.removeCurrentRow', function (event) {
+            //    event.preventDefault();
+            //    $('.removeCurrentRow').parent('.addedRole').remove();
+            //});
         });
     </script>
 

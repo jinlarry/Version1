@@ -22,7 +22,7 @@ namespace Version1.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-
+        private readonly ApplicationDbContext _context;
         private IServiceProvider _serviceProvider;
         private RoleManager<IdentityRole> _roleManager;
 
@@ -31,7 +31,7 @@ namespace Version1.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+            ILoggerFactory loggerFactory, IServiceProvider serviceProvider, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -40,6 +40,7 @@ namespace Version1.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
             _serviceProvider = serviceProvider;
             _roleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            _context = context;
         }
 
         // Get: /Account/Register
@@ -122,6 +123,17 @@ namespace Version1.Controllers
                 if(result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    OperationLogs log = new OperationLogs();
+                    log.ID = Guid.NewGuid().ToString();
+                    log.UserID= _context.ApplicationUser.Where(p=>p.Email== model.Email).First().Id  ;
+                    log.Operation ="LOGIN";
+                    log.OperationResult = "SUCCEED";
+                    log.Action = "LOGIN";
+                    log.Controller = "HOME/ACCOUNT";
+                    log.OperationType ="USERACTION";
+                    log.OperationTime =DateTime.Now;
+                    _context.Add(log);
+                    _context.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 }
                 if(result.RequiresTwoFactor)

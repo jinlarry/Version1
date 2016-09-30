@@ -1,0 +1,59 @@
+@model Version1.Models.Events
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Events</h4>
+    <hr />
+    <table width="100%"><tr><td width="40%">
+                   <dl class="dl-horizontal">
+                       <dt>
+                           @Html.DisplayNameFor(model => model.event_name)
+                       </dt>
+                       <dd>
+                           @Html.DisplayFor(model => model.event_name)
+                       </dd>
+                       <dt>
+                           @Html.DisplayNameFor(model => model.event_address)
+                       </dt>
+                       <dd>
+                           @Html.DisplayFor(model => model.event_address)
+                       </dd>
+                       <dt>
+                           @Html.DisplayNameFor(model => model.event_datetime)
+                       </dt>
+                       <dd>
+                           @Html.DisplayFor(model => model.event_datetime)
+                       </dd>
+
+                       <dt>
+                           @Html.DisplayNameFor(model => model.event_profile)
+                       </dt>
+                       <dd>
+                           @Html.DisplayFor(model => model.event_profile)
+                       </dd>
+                   </dl>
+        </td><td align="left">
+        <dl><dt>
+        Activity Photo</dt><dd>
+        @{ if (Model.event_picture != null)
+            {
+                <img src="~/images/Events/@Model.event_picture" align="left" height="210" width="190" display=inline>
+            }
+            else
+            {
+                <img src="~/images/Events/default.jpg" align="left" height="210" width="190" display=inline>
+            }
+         }</dd></dl>
+      </td>
+    </table>
+</div>
+<div>
+    <a sp-area="Management" asp-controller="Events"asp-action="Edit" asp-route-id="@Model.event_ID">Edit</a> |
+    <a sp-area="Management" asp-controller="Events"asp-action="Index">Back to List</a>
+</div>

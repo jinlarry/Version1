@@ -1,0 +1,130 @@
+@model Version1.Models.Events
+
+@{
+    ViewData["Title"] = "Create";
+  
+}
+
+<h2>Create</h2>
+
+<form sp-area="Management" asp-controller="Events" asp-action="Create" enctype="multipart/form-data">
+
+    <div class="form-horizontal">
+        <h4>Events</h4>
+        <hr />
+
+        <table width="100%">
+               <tr width="100%">
+                    <td width="50%">
+                        <div class="form-group">
+                            <label asp-for="event_name" class="col-md-2 control-label">Name</label>
+                            <div class="col-md-10">
+                                <input asp-for="event_name" class="form-control" />
+                                <span asp-validation-for="event_name" class="text-danger" />
+                            </div>
+                        </div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="event_address" class="col-md-2 control-label">Address</label>
+                            <div class="col-md-10">
+                                <input asp-for="event_address" class="form-control" />
+                                <span asp-validation-for="event_address" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="event_datetime" class="col-md-2 control-label">Date</label>
+                            <div class="col-md-10">
+                                <input asp-for="event_datetime" id="event_datetime_picker" class="form-control" />
+                                <span asp-validation-for="event_datetime" class="text-danger" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label asp-for="event_profile" class="col-md-2 control-label">Profile</label>
+                            <div class="col-md-10">
+                                <textarea asp-for="event_profile" class="form-control" id="Description"
+                                          data-val-required="The Description field is required."
+                                          data-val-maxlength-max="5000"
+                                          data-val-maxlength="The field Description must be a string or array type with a maximum length of '5000'."></textarea>
+                                <span asp-validation-for="event_profile" class="text-danger" />
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="teamid" class="form-control" />
+
+
+     
+    <div class="form-group"> 
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+
+    </td>
+    <td width="50%">
+        <div class="form-group">
+            <input type="file" id="NewsImagepp" value="Open file" title="Open file" accept=".JPG,.JPEG,.GIF,.PNG,.bmp" name="NewsImagepp" />
+            <img id="opop" src="~/images/Events/default.jpg" align="left" width="300" height="500" display=inline> 
+
+            @*<a style="text-align:left" class="col-md-7 control-label" asp-area="default" asp-controller="UploadFile" asp-route-id="Management/Events/Create" asp-action="Index"> Upload Activity Photo</a>
+            <div class="col-md-7" style="align-content:center">
+                @{if(TempData["photoaddress"] != null)
+                    {
+                        <img src="~/images/Events/@TempData["photoaddress"].ToString()" align="left" width="300" height="500" display=inline>
+                        <input type="hidden" asp-for="event_picture" value="@TempData["photoaddress"].ToString()" class="form-control" />
+                    }
+                    else
+                    {
+                        <img src="~/images/Events/default.jpg" align="left" width="300" height="500" display=inline>
+                    }
+                }
+                
+
+            </div>*@
+        </div>
+    </td>
+    </tr>
+ 
+    </table>
+    </div>
+</form>
+
+<div>
+    <a sp-area="Management" asp-controller="Events" asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+    <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+
+    <script>
+$(function(){
+    document.getElementById('event_datetime_picker').valueAsDate = new Date();
+    
+    var _self = this;
+    _self.getObjectURL = function (file) {
+        var url = null;
+        if (window.createObjectURL != undefined) {
+            url = window.createObjectURL(file)
+        } else if (window.URL != undefined) {
+            url = window.URL.createObjectURL(file)
+        } else if (window.webkitURL != undefined) {
+            url = window.webkitURL.createObjectURL(file)
+        }
+        return url
+    };
+    $("#NewsImagepp").change(function (e) {
+        var path = _self.getObjectURL(this.files[0]);
+        if (path != "") {
+            // alert(path);
+            $("#opop").attr('src', path);
+            $("#opop").fadeIn(1000);
+        }
+
+    });
+});
+    </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

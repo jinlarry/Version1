@@ -1,0 +1,40 @@
+﻿@model Version1.ViewModels.Team.NewLeaderViewModel
+
+<form class="form-horizontal" id="formnewleader" asp-route-area="Management" asp-controller="TeamManage" asp-action="ConfirmLeader" asp-route-id="@Model.LeaderId" method="post" role="form">
+    <input id="leadid" hidden asp-for="LeaderId" />
+    <input id="teamid" hidden asp-for="TeamId" />
+    <dl>
+        <dt>
+            @foreach(var item in Model.Leaders)
+            {
+                <div id="ll" class="btneditSelectLeader btn btn-sm glyphicon glyphicon-remove" itmeid="@item.LeaderId" role="radio" value="false" style="font-size:x-large;font-weight:bold;">
+                    @item.FirstName @item.LastName
+                </div>
+            }
+        </dt>
+    </dl>
+
+    <input type="submit" class="btn btn-default btnSubmit" role="button" value="Save Configuration" />
+</form>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.btneditSelectLeader').click(function (event) {
+                event.preventDefault();
+                if ($(this).attr('value') == 'true') {
+                    $(this).attr('value', 'false');
+                    $(this).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+                    $('#leadid').val('');
+                }
+                else if ($(this).attr('value') == 'false') {
+                    $('.btneditSelectLeader').attr('value', 'false');
+                    $('.btneditSelectLeader').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+                    $(this).attr('value', 'true');
+                    $(this).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('#leadid').val($(this).attr('itmeid'));
+
+                }
+            });
+        });
+    </script>
+}

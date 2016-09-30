@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Version1.Models;
 using Version1.ViewModels.RoleManage;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization;
+ 
 namespace Version1.Controllers
 {
     [Area("Management")]
+  //  [Authorize(Roles = "manager")]
     public class RoleManageController : Controller
     {
         #region ================ variables ================
@@ -19,7 +22,11 @@ namespace Version1.Controllers
 
         #endregion
 
-
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var actionName = filterContext.ActionDescriptor.DisplayName;
+            var controllerName = filterContext.Controller.ToString();
+        }
         // Constructor
         public RoleManageController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {

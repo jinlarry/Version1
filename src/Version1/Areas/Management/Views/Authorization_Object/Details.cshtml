@@ -1,0 +1,48 @@
+@model Version1.Models.Authorization_Object
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>authorization_Object</h4>
+    <hr />
+    <dl class="container-fluid">
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectName):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ObjectName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectType):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ObjectType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FullControllerName):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullControllerName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActionName):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ActionName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectDescription):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ObjectDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a  asp-route-area="management" asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a  asp-route-area="management" asp-action="Index">Back to List</a>
+</div>
