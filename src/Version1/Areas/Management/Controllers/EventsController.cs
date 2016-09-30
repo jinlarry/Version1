@@ -7,24 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Version1.Models;
-
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 namespace Version1.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "manager")]
+   // [Authorize(Roles = "manager")]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public EventsController(ApplicationDbContext context)
+        private IHostingEnvironment hostingEnv;
+        public EventsController(IHostingEnvironment env, ApplicationDbContext context)
         {
+            this.hostingEnv = env;
             _context = context;
         }
 
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Events.ToListAsync());
+            return View(await _context.Events.OrderByDescending(p=>p.event_datetime).ToListAsync());
         }
 
         // GET: Events/Details/5
@@ -61,7 +64,23 @@ namespace Version1.Controllers
             {
                 var g = Guid.NewGuid();
                 events.event_ID = g.ToString();
-                //   events.event_picture = TempData["photoaddress"].ToString();
+                //Uploading the Event representative image
+                string ImageGUID = Guid.NewGuid().ToString();
+                var file = Request.Form.Files[0];
+                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                if (filename!="")
+                {
+                    filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                    events.event_picture = filename;
+                    filename = hostingEnv.WebRootPath + $@"\images\Events\{filename}";
+                    using (FileStream fs = System.IO.File.Create(filename))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                
+
                 _context.Add(events);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -101,12 +120,38 @@ namespace Version1.Controllers
             {
                 try
                 {
-                    if(TempData["photoaddress"] != null)
+                    string oldimagepath = events.event_picture ;
+                    Boolean IfNewimage = false;
+                    //upload Newsletter image                   
+                    if (Request.Form.Files.Count > 0)
                     {
-                        events.event_picture = TempData["photoaddress"].ToString();
+                        string ImageGUID = Guid.NewGuid().ToString();
+                        var file = Request.Form.Files[0];
+                        var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        if (filename != "")
+                        {
+                            filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                            events.event_picture = filename;
+                            filename = hostingEnv.WebRootPath + $@"\images\Events\{filename}";
+                            using (FileStream fs = System.IO.File.Create(filename))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush(); IfNewimage = true;
+                            }
+                        }
+                            
                     }
 
                     _context.Update(events);
+                    //delete old image
+                    if (IfNewimage)
+                    {
+                        oldimagepath = hostingEnv.WebRootPath + $@"\images\Events\{oldimagepath}";
+                        if (System.IO.File.Exists(oldimagepath))
+                        {
+                            System.IO.File.Delete(oldimagepath);
+                        }
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch(DbUpdateConcurrencyException)
@@ -150,6 +195,20 @@ namespace Version1.Controllers
             var events = await _context.Events.SingleOrDefaultAsync(m => m.event_ID == id);
             _context.Events.Remove(events);
             await _context.SaveChangesAsync();
+            //delete old image
+            string oldimagepath = events.event_picture;
+            oldimagepath = hostingEnv.WebRootPath + $@"\images\Events\{oldimagepath}";
+            if (System.IO.File.Exists(oldimagepath))
+            {
+                try
+                {
+                    System.IO.File.Delete(oldimagepath);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
             return RedirectToAction("Index");
         }
 

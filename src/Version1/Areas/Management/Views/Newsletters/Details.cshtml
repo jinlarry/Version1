@@ -1,0 +1,68 @@
+@model Version1.Models.Newsletter
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Management/Views/Shared/_ManagementLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Newsletter</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NewsletterName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NewsletterName)
+        </dd><br>
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PublishDate)
+        </dd>
+        <br>
+        <dt>
+            @Html.DisplayNameFor(model => model.Detail)
+        </dt>
+        
+        <dd>
+            <textarea    readonly="readonly" style="min-width:80%;background-color:white;height:auto" asp-for="@Model.Detail" class="form-control" id="editor1"   width="100%"></textarea>
+        </dd>
+        <br>
+
+        <dt>
+            <button  class="btn btn-default btn-circle btn-xl" style="background-color:mediumaquamarine; text-align:center"  id="pdfbutton" type="button">
+                PDF <i class="previous" ></i>
+            </button>
+        </dt>
+        <dd>
+           <div id="opop" hidden="hidden"> <embed   src="~/images/Newsletters/@Model.ImagePath"  width="82%" height="100%"  /></div>  </dd>
+       
+      
+       
+    </dl>
+</div>
+<div>
+    <a asp-route-area="Management" asp-action="Edit" asp-route-id="@Model.NewsletterId">Edit</a> |
+    <a asp-route-area="Management" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link href="~/lib/dist/css/sb-admin-2.css" rel="stylesheet" type="text/css">
+    <script>
+        $(function () {
+           
+            $("#pdfbutton").click(function () {
+                if ($("#opop").is(':hidden')) {
+                    $("#opop").show();
+                } else if ($("#opop").is(':visible')) {
+                    $("#opop").hide()
+                }
+            })
+        });
+    </script>
+    }

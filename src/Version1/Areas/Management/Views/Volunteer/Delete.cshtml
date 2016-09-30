@@ -16,6 +16,10 @@
     <h4>ApplicationUser</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dd>
+            <img src="~/images/Portrait/@Model.Portrait" align="left" width="190" height="210" display=inline>
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.AccessFailedCount)
         </dt>
@@ -118,9 +122,10 @@
         <dd>
             @Html.DisplayFor(model => model.UserName)
         </dd>
+
     </dl>
     
-    <form sp-area="Management" asp-controller="Volunteer" asp-action="Delete">
+    <form sp-area="Management" asp-controller="Volunteer" asp-action="Delete" asp-route-id="@Model.Id">
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             <a sp-area="Management" asp-controller="Volunteer" asp-action="Index">Back to List</a>

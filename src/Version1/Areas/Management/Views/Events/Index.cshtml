@@ -5,7 +5,7 @@
 <p>
     <a sp-area="Management" asp-controller="Events" asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="eventtable">
     <thead>
         <tr>
             <th>
@@ -52,3 +52,14 @@
         }
     </tbody>
 </table>
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+    <script>
+    $(document).ready(function () {
+
+        $('#eventtable').DataTable({ "columnDefs": [{ "className": "dt-center", "targets": "_all" }] });
+     
+     });
+    </script>}

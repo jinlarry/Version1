@@ -11,14 +11,14 @@ namespace Version1.Models
     {
         [Key]
         public string NewsletterId { get; set; }
-
+        [Display(Name ="Newsletter Name")]
         public string NewsletterName { get; set; }
-
+        [Display(Name = "Publish Date")]
         [DataType(DataType.DateTime)]
         public DateTime PublishDate { get; set; }
 
         public string ImagePath { get; set; }
-
+        [Display(Name = "Newsletter Detail")]
         public string Detail { get; set; }
     }
 }

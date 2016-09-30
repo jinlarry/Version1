@@ -1,0 +1,552 @@
+﻿ @model IEnumerable<Version1.Models.ZeroRabbishRoute> 
+ 
+<h2> </h2>
+<h3> </h3> <div class="row">   </div>
+<h1 class="col-md-offset-1 tagline">Pin point your cleaning range or route</h1>
+ <br>
+<div  class="col-xs-3 row">
+    <div id="Tabs" role="tabpanel">
+        <ul class="nav nav-tabs col-lg-offset-0" role="tablist" style="margin-left:20px" >
+            <li  style="visibility:hidden">
+                <a  href="#RouteDiv" aria-controls="Routes"  role="tab" data-toggle="tab">
+                    Pin Route
+                </a>
+            </li>
+            <li class="active" style="visibility:hidden">
+                <a  href="#RangeDiv" aria-controls="Ranges" role="tab" data-toggle="tab">
+                    Pin Range
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content" style="padding-top: 20px; height:100%;text-align:center;vertical-align:middle;">
+            <div role="tabpanel" class="tab-pane" id="RouteDiv" style="visibility:hidden;text-align:center;vertical-align:middle;height:100%;">
+                <div class="col-sm-3 row" style="margin-left:30px;margin-top:20px">
+                    <ul>                        
+                    </ul>                  
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane active" id="RangeDiv" style="text-align:center;vertical-align:middle;height:100%;">
+                <div class="col-sm-3 row" style="margin-left:30px;margin-top:20px">
+                <ul>
+                    <li class="col-md-offset-1" style="list-style-type:none">
+                        <div class="row">
+                            <input class="col-md-offset-1 btn btn-primary" type="button" id="dd" value="Clean Your Map" onclick='$("#cleanmap").click()' />
+                        </div>
+                    </li>    
+                    <br>             
+                    <li class="col-md-offset-1" style="list-style-type:none">
+                        <div class="row">
+                            <input class="col-md-offset-1 btn btn-primary" style="background-image:url(/images/GoogleMap/RangeNode.png);background-repeat: no-repeat;padding-right: 32px;background-position:right;" type="button" type="button" id="AddRangeNode" value="Add Cleaning Range Point" />
+                        </div>
+                    </li><br> 
+                    <li class="col-md-offset-1" style="list-style-type:none">
+                        <div class="row">   <input class="col-md-offset-1 btn btn-primary" title="" type="submit" id="SubmitRange" value="Submit Range" /></div>
+                    </li><br> 
+                    <li class="col-md-offset-1" style="list-style-type:none">
+                        <div class="row">
+                            @*<input class="col-md-offset-1 btn btn-primary" type="button" id="CreateRange" value="Create Your Cleaning Range" />*@
+                            <input class="col-md-offset-1 btn btn-primary" style="background-image:url(/images/GoogleMap/passing.png);background-repeat: no-repeat;padding-right: 32px;background-position:right;" type="button" id="AddRoutePoint" value="Add Cleaning Route Point" />
+                        </div>
+                    </li> <br> 
+                    <li class="col-md-offset-1" style="list-style-type:none">
+                        <div class="row">   <input class="col-md-offset-1 btn btn-primary" title="" type="submit" id="SubmitRoute" value="Submit Route" /></div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<div class="col-xs-9">
+    <label>Notice: You can click mouse right button on your range or route to delete.</label>
+<div id="map" style="width: 1000px; height: 500px; border: 10px solid rgba(0,0,0,.7)"></div>
+<div>
+   
+    @section Scripts {
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCUE_w2LT_TNvBcmkkCMvisJJ6afIAfrY"></script>
+        <script type="text/javascript" src="~/lib/TilotitiJQueryGoogleMap/jquery.googlemap.js"></script>
+        <link rel="stylesheet" href="~/lib/dist/css/jquery-confirm.min.css">
+        <script type="text/javascript" src="~/lib/dist/js/jquery-confirm.min.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            var Range; var Route; var global_pathcolor;
+            var RangePointList = []; var RoutePointList = [];
+            var SouthAlive = { lat: -46.4277692, lng: 168.3608838 };
+            function addMarker(location, map) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    icon: '/images/GoogleMap/southalive.png',
+                    map: map,
+                    draggable: false
+                });
+            }
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: SouthAlive
+            });
+            addMarker(SouthAlive, map);
+
+            $("#cleanmap").click(function () {
+                RangePointList.splice(0, RangePointList.length);
+                RoutePointList.splice(0, RoutePointList.length);
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 15,
+                    center: SouthAlive
+                });
+                addMarker(SouthAlive, map);
+            });
+
+            $("#cleanmap").click();
+
+            InitializeMapRoute();
+            InitializeMapRange();
+            function GetMapCurrentPosition() {
+
+                var aa = [];
+                aa.push(map.getCenter().lat());
+                aa.push(map.getCenter().lng());
+                return aa;
+            }
+            $("#AddRangeNode").click(function () {
+                var myLatlng;
+                var latcoord = map.getCenter().lat();
+                var lngcoord = map.getCenter().lng();
+                if (RangePointList.length == 0) {
+                    myLatlng = { lat: latcoord, lng: lngcoord };
+                } else {
+                    myLatlng = { lat: RangePointList[RangePointList.length - 1].lat + 0.0009, lng: RangePointList[RangePointList.length - 1].lng - 0.0001 };
+                }
+
+                var i = RangePointList.length;
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: 'RANGENODE',
+                    icon: '/images/GoogleMap/RangeNode.png',
+                    draggable: true,
+                    id: false,
+                    order: i
+                });
+                RangePointList.push(myLatlng);
+                marker.addListener('rightclick', function (event) {
+                    //在这加入marker删除操作
+                });
+                marker.addListener('dragend', function (event) {
+                    var location = marker.getPosition();
+                    RangePointList[i] = { lat: location.lat(), lng: location.lng() };
+
+                    if (Range != null) {
+                        Range.setMap(null);
+                    }
+                    Range = CreateCleanRange(RangePointList);
+                });
+            });
+
+            $("#AddRoutePoint").click(function () {
+                var myLatlng;
+                if ($("#CreateRange").attr("title") == "done") {
+                    return;
+                }
+                var latcoord = map.getCenter().lat();
+                var lngcoord = map.getCenter().lng();
+
+                if (RoutePointList.length == 0) {
+                    myLatlng = { lat: latcoord, lng: lngcoord };
+                } else {
+                    myLatlng = { lat: RoutePointList[RoutePointList.length - 1].lat + 0.0009, lng: RoutePointList[RoutePointList.length - 1].lng - 0.0009 };
+                }
+                var i = RoutePointList.length;
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: 'ROUTENODE',
+                    icon: '/images/GoogleMap/passing.png',
+                    draggable: true,
+                    id: false,
+                    order: i
+                });
+                RoutePointList.push(myLatlng);
+                marker.addListener('rightclick', function (event) {
+                    //在这加入marker删除操作
+                });
+                marker.addListener('dragend', function (event) {
+                    var location = marker.getPosition();
+                    RoutePointList[i] = { lat: location.lat(), lng: location.lng() };
+                    if (Route != null) {
+                        Route.setMap(null);
+                    }
+                    Route = CreateCleanRoute(RoutePointList);
+                });
+
+            });
+
+            $("#SubmitRange").click(function () {
+
+                //if (RangePointList.length <  3) {
+                //    return;
+                //}
+                $.confirm({
+                    title: 'Confirm your submit!',
+                    content: 'Are you sure your cleaning range choice? <br>(If not, you may click "close" and then Clean your map to pin point you range.)',
+                    confirm: function () {
+                        var RouteNote = "RANGE";
+                        var points = new Array();
+                        for (var i = 0; i < RangePointList.length; i++) {
+                            points.push({ PostalAddress: "", lat: RangePointList[i].lat, lon: RangePointList[i].lng, Type: 'RANGENODE', Title: '', Text: '' });
+                        }
+                        var ReceiveData = {
+                            PathColor: '@ViewBag.routecolour', RouteNote: RouteNote, points: points
+                        }
+                        if (points != null && points.length > 1) {
+                            $.ajax({
+                                url: '/ZeroRubbish/Save',
+                                type: 'POST',
+                                data: ReceiveData,
+                                dataType: 'html',
+                                success: function (data) {
+                                    console(data);
+                                }
+                            });
+                        }
+                        $("#Save").attr("title", "done");
+                        //with the message modal to wait synchro finish time of data posting
+                        $.alert({
+                            title: 'Message!',
+                            content: 'Saving finished!',
+                            confirm: function (response) {
+                                window.location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+                    }
+                });
+            });
+
+            $("#SubmitRoute").click(function () {
+                if (RoutePointList.length < 2) {
+                    return;
+                }
+                $.confirm({
+                    title: 'Confirm your submit!',
+                    content: 'Are you sure your cleaning route choice? <br>(If not, you may click "close" and then Clean your map to pin point you route.)',
+                    confirm: function () {
+                        var RouteNote = "ROUTE";
+                        var points = new Array();
+                        for (var i = 0; i < RoutePointList.length; i++) {
+                            points.push({ PostalAddress: "", lat: RoutePointList[i].lat, lon: RoutePointList[i].lng, Type: 'ROUTEPOINT', Title: '', Text: '' });
+                        }
+                        var ReceiveData = {
+                            PathColor: '@ViewBag.routecolour', RouteNote: RouteNote, points: points
+                        }
+
+                        if (points != null && points.length > 1) {
+                            $.ajax({
+                                url: '/ZeroRubbish/Save',
+                                type: 'POST',
+                                data: ReceiveData,
+                                dataType: 'html',
+                                success: function (data) {
+                                    console(data);
+                                }
+                            });
+                        }
+                        $("#Save").attr("title", "done");
+                        //with the message modal to wait synchro finish time of data posting
+                        $.alert({
+                            title: 'Message!',
+                            content: 'Saving finished!',
+                            confirm: function (response) {
+                                window.location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+                    }
+                });
+            });
+
+            function CreateCleanRange(PointList) {
+                var colorp = '@ViewBag.routecolour';
+                if (PointList.length > 2) {
+                    // Construct the polygon.
+                    var RangeGon = new google.maps.Polygon({
+                        paths: PointList,
+                        strokeColor: colorp,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.35
+                    });
+                    RangeGon.setMap(map);
+                }
+                return RangeGon;
+            }
+
+            function CreateCleanRoute(pointlist) {
+                var colorp = '@ViewBag.routecolour';
+                if (pointlist.length > 1) {
+                    // Construct the Polyline.
+                    var Routeline = new google.maps.Polyline({
+                        path: pointlist,
+                        geodesic: true,
+                        strokeColor: colorp,
+                        strokeOpacity: 4,
+                        strokeWeight: 5
+                    });
+                    Routeline.setMap(map);
+                } return Routeline;
+            }
+
+            function InitializeMapRoute() {
+                @foreach (var p in Model)
+                {
+                    string username = p.user.FirstName + "." + p.user.LastName;
+                    string pathcolor = p.PathColor.ToString();
+                    string Routeid = p.RouteID;
+                    //  List<string> point_list = new List<string>();
+                    string point_list = "";
+                    string CreateUserID = p.CreateUserID;
+                    if (p.RouteNote == "ROUTE")
+                    {
+                        foreach (var item in p.Points.Where(m => m.Type == "ROUTEPOINT").OrderBy(k => k.PostalAddress).ToList())
+                        {
+                            // point_list.Add(item.lat.ToString()+","+ item.lon.ToString());
+                            point_list += item.lat.ToString() + "," + item.lon.ToString() + ";";
+                            var ddd = item.lat.ToString();
+                            //   @:alert('@ddd');
+                        }
+
+                        var Age = p.user.Age; var gender = p.user.gender;
+                        var color = p.PathColor;
+                        @:PoltOneRoute('@point_list', '@color', '@username', '@Routeid', '@CreateUserID', '@Age', '@gender');
+                                                                                                                     }
+                }
+            }
+
+            function InitializeMapRange() {
+
+                @foreach (var p in Model)
+                {   @: var myArray = [];
+                    string username = p.user.FirstName + "." + p.user.LastName;
+                    string pathcolor = p.PathColor.ToString();
+                    string Routeid = p.RouteID;
+                    string CreateUserID = p.CreateUserID;
+                    if (p.RouteNote == "RANGE")
+                    {
+                       
+                       
+                        foreach (var item in p.Points.Where(m => m.Type == "RANGENODE").OrderBy(k => k.PostalAddress).ToList())
+                        {
+                       
+                             @:myArray.push({ lat: @item.lat, lng: @item.lon });
+
+                        }
+
+                        var color = p.PathColor;var Age = p.user.Age; var gender = p.user.gender;
+                         @:CreateTheRange(myArray, '@color', '@username', '@Routeid', '@CreateUserID', '@Age', '@gender');
+                    }
+                }
+            }
+
+            var infoWindow; var contentString;
+            function CreateTheRange(nodes, colorp, username, RouteID, CreateUserID, Age, gender) {
+                var lat0, lng0;
+                
+                var listnode = [];
+                var myLatlng;
+                lat0 = nodes[0].lat; lng0 = nodes[0].lng;
+                for (var i = 0; i < nodes.length; i++) {
+                    myLatlng = { lat: nodes[i].lat, lng: nodes[i].lng };
+                    listnode.push(myLatlng);
+                }
+
+
+                var SetRange = new google.maps.Polygon({
+                    paths: listnode,
+                    strokeColor: colorp,
+                    strokeOpacity: 0.8,
+                    strokeWeight: 5,
+                    fillColor: colorp,
+                    fillOpacity: 0.35
+                });
+                SetRange.setMap(map);
+                SetRange.addListener('click', showArrays);
+                contentString = username;
+                infoWindow = new google.maps.InfoWindow;
+                SetRange.addListener('rightclick', function () {
+                    var pp = "";
+                    pp = "-" + ',' + String(RouteID);
+                    if ('@ViewBag.userid' != CreateUserID) {
+                        $.alert({
+                            title: 'Message!',
+                            content: "You cannot delete another person's cleaning range!",
+                            confirm: function (response) {
+                                return;
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Deleting Confirm!',
+                            content: 'Are you sure to delete the range?',
+                            confirm: function () {
+                                CallDeleteRangeAjax(pp);
+                            },
+                            cancel: function () {
+                            }
+                        });
+                    }
+                });
+                var routelogo;
+                if (Age == null || gender == null) {
+                    routelogo = "/*CustomMarker.png*/";
+                }
+                else {
+                    if (gender == "Male" && Age <= 20) { routelogo = "boy.png"; }
+                    if (gender == "Male" && Age > 20 && Age <= 50) { routelogo = "man.png"; }
+                    if (gender == "Male" && Age > 50) { routelogo = "elderman.png"; }
+                    if (gender == "Female" && Age <= 20) { routelogo = "girl.png"; }
+                    if (gender == "Female" && Age > 20 && Age <= 50) { routelogo = "woman.png"; }
+                    if (gender == "Female" && Age > 50) { routelogo = "elderwomen.png"; }
+                }
+                stepDisplay = new google.maps.InfoWindow();
+                var markernew = new google.maps.Marker({
+                    position: { lat: lat0, lng: lng0 },
+                    map: map,
+                    icon: '/images/GoogleMap/' + routelogo,
+                    title: username
+                });
+                attachInstructionText(markernew, contentString);
+            }
+
+
+
+            var infoWindowp; var contentStringp;
+            function PoltOneRoute(nodes, colorp, username, RouteID, CreateUserID, Age, gender) {
+                var lat, lng; var lat0, lng0;
+
+                var listnode = []; var myLatlng;
+                var index1 = nodes.search(";");
+                lat0 = nodes.substr(0, nodes.search(",") - 1);
+                lng0 = nodes.substr(nodes.search(",") + 1, nodes.search(";") - 1);
+
+                while (index1 > 0) {
+                    var temp = nodes.substr(0, index1 - 1);
+                    if (temp.length > 0) {
+                        var index2 = temp.search(",");
+                        lat = temp.substr(0, index2 - 1);
+                        lng = temp.substr(index2 + 1, temp.length);
+                        myLatlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                        listnode.push(myLatlng);
+                        nodes = nodes.substr(index1 + 1, nodes.length);
+                        index1 = nodes.search(";");
+                    }
+                }
+
+                var SetRoute = new google.maps.Polyline({
+                    path: listnode,
+                    strokeColor: colorp,
+                    strokeOpacity: 0.8,
+                    strokeWeight: 5
+                });
+
+                SetRoute.setMap(map);
+                SetRoute.addListener('click', showArrays);
+                contentStringp = username;
+                infoWindowp = new google.maps.InfoWindow;
+                SetRoute.addListener('rightclick', function () {
+                    var pp = "";
+                    pp = "-" + ',' + String(RouteID);
+                    if ('@ViewBag.userid' != CreateUserID) {
+                        $.alert({
+                            title: 'Message!',
+                            content: "You cannot delete another person's cleaning route!",
+                            confirm: function (response) {
+                                return;
+                            }
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Deleting Confirm!',
+                            content: 'Are you sure to delete the route?',
+                            confirm: function () {
+                                CallDeleteRangeAjax(pp);
+                            },
+                            cancel: function () {
+                            }
+                        });
+                    }
+                });
+                var routelogo;
+                if (Age == null || gender == null) {
+                    routelogo = "/*CustomMarker.png*/";
+                }
+                else {
+                    if (gender == "Male" && Age <= 20) { routelogo = "boy.png"; }
+                    if (gender == "Male" && Age > 20 && Age <= 50) { routelogo = "man.png"; }
+                    if (gender == "Male" && Age > 50) { routelogo = "elderman.png"; }
+                    if (gender == "Female" && Age <= 20) { routelogo = "girl.png"; }
+                    if (gender == "Female" && Age > 20 && Age <= 50) { routelogo = "woman.png"; }
+                    if (gender == "Female" && Age > 50) { routelogo = "elderwomen.png"; }
+                }
+                var stepDisplay = new google.maps.InfoWindow();
+                var markerppp = new google.maps.Marker({
+                    position: { lat: parseFloat(lat0), lng: parseFloat(lng0) },
+                    map: map,
+                    icon: '/images/GoogleMap/' + routelogo
+                });
+                attachInstructionText(markerppp, contentStringp);
+            }
+
+
+
+            function showArrays(event) {
+                //infoWindow.setContent(contentString);
+                //infoWindow.setPosition(event.latLng);
+                //infoWindow.open(map);
+                //infoWindowp.setContent(contentStringp);
+                //infoWindowp.setPosition(event.latLng);
+                //infoWindowp.open(map);
+            }
+
+            function CallDeleteRangeAjax(data) {
+                var DeleteRouteData = { RouteToDelete: data }
+                $.ajax({
+                    url: '/ZeroRubbish/RouteDelete',
+                    type: 'POST',
+                    data: DeleteRouteData,
+                    dataType: 'html',
+                    success: function (response) {
+                        // alert(response.responseText);
+                    },
+                    error: function (response) {
+                        //  alert(response.responseText);
+                    }
+                });
+                $.alert({
+                    title: 'Message!',
+                    content: 'Delete finished!',
+                    confirm: function (response) {
+                        window.location.reload();
+                    }
+                });
+            }
+
+            function attachInstructionText(marker, text) {
+                marker.addListener('click', function () {
+                    stepDisplay.setContent(text);
+                    stepDisplay.open(map, marker);
+                })
+            };
+
+        })
+    </script>
+    }
+    
+                
+   

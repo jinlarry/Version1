@@ -30,25 +30,41 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a asp-controller="ManageIndex" asp-action="Index">Mainpage</a> </li>
                     <li><a asp-controller="TeamManage" asp-action="Index">Team</a></li>
                     <li><a asp-controller="Volunteer" asp-action="Index">Volunteer</a></li>
+                    <li><a asp-controller="Galleries" asp-action="Index">Gallery</a></li>
+                    <li class="dropdown" id="se1">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            News Manage <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a asp-controller="News" asp-action="Index">News</a> </li>
+                            <li><a asp-controller="News" asp-action="CensorIndex">Censor</a></li>
+                        </ul>
+                        
+                    </li>
                     <li><a asp-controller="Events" asp-action="Index">Event</a></li>
-                    <li><a asp-controller="NewsletterManage" asp-action="Index">Newsletter</a></li>
-                    <li class="dropdown">
+                    <li><a asp-controller="Newsletters" asp-action="Index">Newsletter</a></li>
+                    <li class="dropdown" id="se2">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Role Manage <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/Management/RoleManage/RoleManage">Role Manage</a></li>
-                            <li><a href="/Management/RoleManage/EditRoles">Edit Roles</a></li>
+                            <li><a href="/Management/RoleManage/EditRoles"> Role and User</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a asp-controller="Authorization_Object" asp-action="index">Role function managment</a>
+                    <li class="dropdown" id="se3">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Authorization Managment  <span class="caret"></span>
+                        </a>                      
+                        <ul class="dropdown-menu">
+                            <li><a href="/Management/Authorization_Object/index">Authorization Resource </a></li>
+                            <li><a href="/Management/Authorization_Object_Role/index">Authorization and Role  </a></li>
+                        </ul>
                     </li>
-                    <li>
-                        <a asp-controller="Authorization_Object_Role" asp-action="index">Role Mapping</a>
-                    </li>
+                   
                 </ul>
             </div>
         </div>

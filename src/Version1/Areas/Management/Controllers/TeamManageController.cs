@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Version1.Models;
 using Version1.ViewModels.Team;
 using Microsoft.AspNetCore.Mvc.Filters;
-
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 namespace Version1.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "manager")]
+   // [Authorize(Roles = "manager")]
     public class TeamManageController : Controller
 
     {
@@ -20,10 +22,10 @@ namespace Version1.Controllers
         TeamMemberViewModel memberViewModel = new TeamMemberViewModel();
         TeamMemberIndexViewModel memberIndexViewModel = new TeamMemberIndexViewModel();
         TeamDetailViewModel teamDetailViewModel = new TeamDetailViewModel();
-
+        private IHostingEnvironment hostingEnv;
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            // return;
+              return;
             if(ModelState.Count == 0)
             {
                 var areaname = filterContext.ActionDescriptor.RouteConstraints.Where(i => i.RouteKey == "area").First().RouteValue.ToString();
@@ -97,8 +99,9 @@ namespace Version1.Controllers
                 }
             }
         }
-        public TeamManageController(ApplicationDbContext context)
+        public TeamManageController(IHostingEnvironment env, ApplicationDbContext context)
         {
+            this.hostingEnv = env;
             _context = context;
         }
 
@@ -184,6 +187,22 @@ namespace Version1.Controllers
             
             if(ModelState.IsValid)
             {
+                //upload Newsletter image
+                string ImageGUID = Guid.NewGuid().ToString();
+                var file = Request.Form.Files[0];
+                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                if (filename != "")
+                {
+                    filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                    Team.TeamImage = filename;
+                    filename = hostingEnv.WebRootPath + $@"\images\Teams\{filename}";
+                    using (FileStream fs = System.IO.File.Create(filename))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                   
                 _context.Add(Team);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -223,8 +242,39 @@ namespace Version1.Controllers
             {
                 try
                 {
+                    string oldimagepath = Team.TeamImage;
+                    Boolean IfNewimage = false;
+                    //upload Newsletter image                   
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        string ImageGUID = Guid.NewGuid().ToString();
+                        var file = Request.Form.Files[0];
+                        var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        if (filename != "")
+                        {
+                            filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                            Team.TeamImage = filename;
+                            filename = hostingEnv.WebRootPath + $@"\images\Teams\{filename}";
+                            using (FileStream fs = System.IO.File.Create(filename))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush(); IfNewimage = true;
+                            }
+                        }
+                            
+                    }
+
                     _context.Update(Team);
                     await _context.SaveChangesAsync();
+                    //delete old image
+                    if (IfNewimage)
+                    {
+                        oldimagepath = hostingEnv.WebRootPath + $@"\images\Teams\{oldimagepath}";
+                        if (System.IO.File.Exists(oldimagepath))
+                        {
+                            System.IO.File.Delete(oldimagepath);
+                        }
+                    }
                 }
                 catch(DbUpdateConcurrencyException)
                 {
@@ -265,10 +315,24 @@ namespace Version1.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var Team = await _context.Teams.SingleOrDefaultAsync(m => m.TeamId == id);
+            string oldimagepath = Team.TeamImage;
             _context.Teams.Remove(Team);
             var members = _context.TeamMembers.Where(n => n.TeamId == id);
             _context.TeamMembers.RemoveRange(members);
             await _context.SaveChangesAsync();
+            //delete old image
+            oldimagepath = hostingEnv.WebRootPath + $@"\images\Teams\{oldimagepath}";
+            if (System.IO.File.Exists(oldimagepath))
+            {
+                try
+                {
+                    System.IO.File.Delete(oldimagepath);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
             return RedirectToAction("Index");
         }
 
