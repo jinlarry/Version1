@@ -15,4 +15,5 @@ namespace Version1.ViewModels.Home
             Events = new List<Models.Events>();
         }
     }
+    
 }

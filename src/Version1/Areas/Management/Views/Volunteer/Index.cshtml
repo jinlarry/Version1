@@ -12,12 +12,13 @@
     <p style="margin-top:10px">
         <a class="btn btn-default" sp-area="Management" asp-controller="Volunteer" asp-action="Create">Create New</a>
     </p>
-    <table class="table">
-        <thead>
+    <table class="display" id="Volunteertable">
+        <thead  align="center">
             <tr>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.EmailConfirmed)
-                    </th>*@
+                <th  align="center">
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                
                 <th>
                     @Html.DisplayNameFor(model => model.FirstName)
                 </th>
@@ -27,19 +28,15 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.NormalizedEmail)
-                    </th>*@
+               
+               
 
                 <th>
                     @Html.DisplayNameFor(model => model.PhoneNumber)
                 </th>
-                @*<th>
-                        @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-                    </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.gender)
+                </th>
 
                 <th>
                     @Html.DisplayNameFor(model => model.Age)
@@ -51,6 +48,9 @@
             @foreach(var item in Model)
             {
                 <tr>
+                    <td align="center">
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FirstName)
                     </td>
@@ -60,24 +60,17 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserName)
-                    </td>
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.PhoneNumber)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.gender)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Age)
                     </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.EmailConfirmed)
-                        </td>*@
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.NormalizedEmail)
-                        </td>*@
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
-                        </td>*@
+                   
                     <td>
                         <a sp-area="Management" asp-controller="Volunteer" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a sp-area="Management" asp-controller="Volunteer" asp-action="Details" asp-route-id="@item.Id">Details</a> |
@@ -89,3 +82,30 @@
     </table>
 </body>
 </html>
+
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(
+            
+            function () {
+                $('#Volunteertable').DataTable(
+                {
+                       "columnDefs": [{"className": "dt-center", "targets": "_all"}],
+                       "createdRow": function (row, data, dataIndex)
+                       {
+                           $(row).children('th').eq(0).attr('style', 'text-align: center;')
+                           $(row).children('td').eq(0).attr('style', 'text-align: center;')
+                           $(row).children('td').eq(1).attr('style', 'text-align: center;')
+                           $(row).children('td').eq(2).attr('style', 'text-align: center;')
+                       }
+                });
+               
+            }
+
+        );
+
+     
+    </script>}

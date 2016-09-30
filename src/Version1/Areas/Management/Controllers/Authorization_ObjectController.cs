@@ -11,7 +11,7 @@ using Version1.Models;
 namespace Version1.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "manager")]
+  //  [Authorize(Roles = "manager")]
     public class Authorization_ObjectController : Controller
     {
         private readonly ApplicationDbContext _context;

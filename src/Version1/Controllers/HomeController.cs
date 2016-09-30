@@ -47,6 +47,10 @@ namespace Version1.Controllers
 
             return View(viewModel);
         }
+        public IActionResult ZeroRubbish( )
+        {      
+            return View();
+        }
 
         public IActionResult About()
         {

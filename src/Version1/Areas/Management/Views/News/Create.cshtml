@@ -1,0 +1,142 @@
+@model Version1.Models.News
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Management/Views/Shared/_ManagementLayout.cshtml";
+}
+<style>
+.a-upload {
+    padding: 4px 10px;
+    height: 30px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+</style>
+
+<h2>Create</h2>
+@*enctype="multipart/form-data"  表示可以携带files在form中并传递到后台*@
+<form asp-route-area="management" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <h4>News</h4><label value="Author:@ViewBag.CreateUser" class="col-md-2 control-label"></label>
+        <hr />
+
+        <div class="form-group">
+            <label asp-for="NewsType" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select id="PP" asp-for="NewsType" asp-items="ViewBag.NewsType" class="form-control"></select>
+
+                @*  <span asp-validation-for="NewsType" class="text-danger" /> *@
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NewsTitle" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NewsTitle" class="form-control" />
+                <span asp-validation-for="NewsTitle" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NewsContent" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                @*   <input asp-for="NewsContent" class="form-control" />*@
+                <textarea asp-for="NewsContent" class="form-control" id="editor1" rows="10" cols="200">
+                    This is my textarea to be replaced with CKEditor.
+                </textarea>
+
+                <span asp-validation-for="NewsContent" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NewsImage" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                @*<a style="text-align:left" class="col-md-3 control-label" asp-area="default" asp-controller="UploadFile" asp-route-id="Management/News/Create" asp-action="Index"> Upload News Title Photo (800X400 Aspect ratio)</a>*@
+                <a href="javascript:;" class="a-upload">
+                    <input type="file" id="NewsImagepp" value="Open file" title="Open file" accept=".JPG,.JPEG,.GIF,.PNG,.BMP" name="NewsImagepp" />
+                </a>
+                    <img id="opop" src="~/images/News/default.jpg" align="left" width="800" height="400" display=inline>
+                    <div class="col-md-6">
+                    </div>
+</div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="checkbox">
+                        <input asp-for="Selected" />
+                        <label asp-for="Selected"></label>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                 <label asp-for="SensorID" class="col-md-2 control-label"></label>
+                 <div class="col-md-10">
+                     <input asp-for="SensorID" class="form-control" />
+                     <span asp-validation-for="SensorID" class="text-danger" />
+                 </div>
+             </div>-->
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                   
+                        <input type="submit" value="Create" class="btn btn-default" />
+                 
+                </div>
+            </div>
+        </div>
+</form>
+
+<div>
+    <a asp-route-area="management" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+    <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+
+    <script>
+        $(function () {
+            $('#PP').editableSelect();
+            var _self = this;
+            _self.getObjectURL = function (file) {
+                var url = null;
+                if (window.createObjectURL != undefined) {
+                    url = window.createObjectURL(file)
+                } else if (window.URL != undefined) {
+                    url = window.URL.createObjectURL(file)
+                } else if (window.webkitURL != undefined) {
+                    url = window.webkitURL.createObjectURL(file)
+                }
+                return url
+            };
+            $("#NewsImagepp").change(function (e) {
+                var path = _self.getObjectURL(this.files[0]);
+                if (path != "") {
+                    // alert(path);
+                    $("#opop").attr('src', path);
+                    $("#opop").fadeIn(1000);
+                }
+
+            });
+        });
+    </script>
+    <script src="/lib/ckeditor/ckeditor.js">
+    </script>
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor
+        // instance, using default configuration.
+        CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+        CKEDITOR.replace('editor1');
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

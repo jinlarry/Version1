@@ -8,25 +8,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Version1.Models;
 using Version1.ViewModels.RoleManage;
-
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 namespace Version1.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "manager")]
+  //  [Authorize(Roles = "manager")]
     public class VolunteerController : Controller
     {
         Version1.ViewModels.Account.VolunteerViewModel viewModel = new Version1.ViewModels.Account.VolunteerViewModel();
         private readonly ApplicationDbContext _context;
-
-        public VolunteerController(ApplicationDbContext context)
+        private IHostingEnvironment hostingEnv;
+        public VolunteerController(IHostingEnvironment env, ApplicationDbContext context)
         {
+            this.hostingEnv = env;
             _context = context;
         }
 
         // GET: Volunteer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ApplicationUser.ToListAsync());
+            return View(await _context.ApplicationUser.OrderByDescending(p=>p.RegisterationDatetime).ToListAsync());
         }
 
         // GET: Volunteer/Details/5
@@ -64,10 +67,27 @@ namespace Version1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AccessFailedCount,Age,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Portrait")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Create([Bind("Id,gender,AccessFailedCount,Age,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,Portrait,RegisterationDatetime,UserState")] ApplicationUser applicationUser)
         {
             if(ModelState.IsValid)
             {
+                
+                //upload Newsletter image
+                string ImageGUID = Guid.NewGuid().ToString();
+                var file = Request.Form.Files[0];
+                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                if (filename!="")
+                {
+                    filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                    applicationUser.Portrait = filename;
+                    filename = hostingEnv.WebRootPath + $@"\images\portrait\{filename}";
+                    using (FileStream fs = System.IO.File.Create(filename))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                
                 _context.Add(applicationUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -96,7 +116,7 @@ namespace Version1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,AccessFailedCount,Age,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,gender,AccessFailedCount,Age,ConcurrencyStamp,Email,EmailConfirmed,FirstName,LastName,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber,PhoneNumberConfirmed,SecurityStamp,TwoFactorEnabled,UserName,RegisterationDatetime,UserState")] ApplicationUser applicationUser)
         {
             if(id != applicationUser.Id)
             {
@@ -107,7 +127,37 @@ namespace Version1.Controllers
             {
                 try
                 {
+                    string oldimagepath = applicationUser.Portrait;
+                    Boolean IfNewimage = false;
+                    //upload Newsletter image                   
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        string ImageGUID = Guid.NewGuid().ToString();
+                        var file = Request.Form.Files[0];
+                        var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        if (filename != "")
+                        {
+                            filename = ImageGUID + filename.Substring(filename.Length - 4, 4);
+                            applicationUser.Portrait = filename;
+                            filename = hostingEnv.WebRootPath + $@"\images\portrait\{filename}";
+                            using (FileStream fs = System.IO.File.Create(filename))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush(); IfNewimage = true;
+                            }
+                        }
+                            
+                    }
                     _context.Update(applicationUser);
+                    //delete old image
+                    if (IfNewimage)
+                    {
+                        oldimagepath = hostingEnv.WebRootPath + $@"\images\portrait\{oldimagepath}";
+                        if (System.IO.File.Exists(oldimagepath))
+                        {
+                            System.IO.File.Delete(oldimagepath);
+                        }
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch(DbUpdateConcurrencyException)
@@ -149,8 +199,22 @@ namespace Version1.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
+            string oldimagepath = applicationUser.Portrait;
             _context.ApplicationUser.Remove(applicationUser);
             await _context.SaveChangesAsync();
+            //delete old image
+            oldimagepath = hostingEnv.WebRootPath + $@"\images\portrait\{oldimagepath}";
+            if (System.IO.File.Exists(oldimagepath))
+            {
+                try
+                {
+                    System.IO.File.Delete(oldimagepath);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
             return RedirectToAction("Index");
         }
 

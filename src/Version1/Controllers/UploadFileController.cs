@@ -50,6 +50,10 @@ namespace Version1.Controllers
                 {
                     filename = hostingEnv.WebRootPath + $@"\images\Events\{filename}";
                 }
+                else if (id == "Management/News/Create" || id == "Management/News/Edit")
+                {
+                    filename = hostingEnv.WebRootPath + $@"\images\News\{filename}";
+                }
                 else
                 {
                     filename = hostingEnv.WebRootPath + $@"\images\portrait\{filename}";
@@ -95,6 +99,29 @@ namespace Version1.Controllers
                         area = "Management",
                         controller = "Events",
                         action = "Create",
+                    });
+                }
+                else if (id == "Management/News/Create")
+                {
+                    TempData["photoaddress"] = OFile;                    
+                    return RedirectToRoute(new
+                    {
+                        area = "Management",
+                        controller = "News",
+                        action = "Create",                       
+                    });
+                }
+                else if (id == "Management/News/Edit")
+                {
+                    TempData["photoaddress"] = OFile;
+                   // _context.Events.Where(a => a.event_ID == TempData["eventID"].ToString()).First().event_picture = OFile;
+                   // _context.SaveChanges();
+                    return RedirectToRoute(new
+                    {
+                        area = "Management",
+                        controller = "News",
+                        action = "Edit",
+                        id = TempData["NewsID"]
                     });
                 }
                 else if(id == "Management/Events/Edit")

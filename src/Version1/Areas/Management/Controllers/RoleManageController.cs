@@ -8,11 +8,11 @@ using Version1.ViewModels.RoleManage;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
-
+ 
 namespace Version1.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "manager")]
+  //  [Authorize(Roles = "manager")]
     public class RoleManageController : Controller
     {
         #region ================ variables ================

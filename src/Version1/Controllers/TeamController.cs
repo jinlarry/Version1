@@ -20,10 +20,12 @@ namespace Version1.Controllers
         public IActionResult Index(FronTeamViewModel viewModel)
         {
             var teams = viewModel.Teams;
-
-            foreach(var team in _context.Teams)
+            if (_context.Teams.Count()>0)
             {
-                teams.Add(team);
+                foreach (var team in _context.Teams)
+                {
+                    teams.Add(team);
+                }
             }
 
             return View(viewModel);

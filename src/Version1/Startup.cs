@@ -3,17 +3,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
+ 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using Version1.Models;
 using Version1.Services;
 
+using Microsoft.Extensions.Configuration;
+ 
+
 namespace Version1
 {
     public class Startup
     {
+        
         // public Startup(IHostingEnvironment env)IHostingEnvironment hostingEnv
         public Startup(IHostingEnvironment hostingEnv)
         {
@@ -39,6 +43,7 @@ namespace Version1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //services.AddEntityFramework()
             //    .AddEntityFrameworkSqlServer()
             //    .AddDbContext<ApplicationDbContext>(options =>
@@ -56,12 +61,22 @@ namespace Version1
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            } );  
 
             services.AddSession();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            // Should work like this
+            // Refer: https://docs.asp.net/en/latest/fundamentals/configuration.html#using-options-and-configuration-objects
+           // services.AddOptions();
+            /*IOptions pattern to config how to create the class"AppParameterSettings" 
+             * Refer: http://andrewlock.net/how-to-use-the-ioptions-pattern-for-configuration-in-asp-net-core-rc2*/
+
+             services.Configure<AppParameterSettings>(options => Configuration.GetSection("AppParameterSettings").Bind(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +95,7 @@ namespace Version1
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-
+                
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
@@ -105,7 +120,7 @@ namespace Version1
             {
                 routes.MapRoute(
                    name: "Management",
-                   template: "{area:exists}/{controller=RoleManage}/{action=Index}/{param?}");
+                   template: "{area:exists}/{controller=ManageIndex}/{action=Index}/{param?}");
 
                 routes.MapRoute(
                   name: "default",
@@ -114,3 +129,4 @@ namespace Version1
         }
     }
 }
+
