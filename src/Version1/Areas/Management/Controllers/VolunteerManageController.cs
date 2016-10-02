@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Version1.Controllers
 {
-    [Area("Management")]
-    public class VolunteerController
-    {
-    }
+    //[Area("Management")]
+    //public class VolunteerController
+    //{
+    //}
 }
