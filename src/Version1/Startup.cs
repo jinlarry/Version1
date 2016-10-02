@@ -59,6 +59,7 @@ namespace Version1
             services.AddMvc();
 
             services.AddSession();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();

@@ -1,0 +1,65 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@section style{
+    <style>
+        .news_block {
+            margin-top: 50px;
+        }
+
+        .news_box {
+            border: 1px solid #000000;
+        }
+
+        hr {
+            border-top: 2px solid #000000;
+        }
+    </style>
+
+}
+
+<div class="row news_block title_block">
+    <h1 class="text-center">News</h1>
+</div>
+
+@* The main part of news page. Need to loop through all entities when linked to real database. *@
+<div class="row news_block news_boxes">
+    <div class="col-md-3 news_box text-center">
+        <img src="~/images/News/placeHolder.png" alt="place holder" class="img-responsive center-block" />
+        <hr />
+        <h3 class="text-center">News Name</h3>
+        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Lorem Ipsum has been the industry's.</p>
+        <a href="news/singlenews" class="btn btn-default">Read More</a>
+    </div>
+    <div class="col-md-3 news_box text-center">
+        <img src="~/images/News/placeHolder.png" alt="place holder" class="img-responsive center-block" />
+        <hr />
+        <h3 class="text-center">News Name</h3>
+        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s Lorem Ipsum has been the industry's.</p>
+        <button type="button" class="btn btn-default">Read More</button>
+    </div>
+    <div class="col-md-3 news_box text-center">
+        <img src="~/images/News/placeHolder.png" alt="place holder" class="img-responsive center-block" />
+        <hr />
+        <h3 class="text-center">News Name</h3>
+        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s Lorem Ipsum has been the industry's.</p>
+        <button type="button" class="btn btn-default">Read More</button>
+    </div>
+    <div class="col-md-3 news_box text-center">
+        <img src="~/images/News/placeHolder.png" alt="place holder" class="img-responsive center-block" />
+        <hr />
+        <h3 class="text-center">News Name</h3>
+        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s Lorem Ipsum has been the industry's.</p>
+        <button type="button" class="btn btn-default">Read More</button>
+    </div>
+    <div class="col-md-3 news_box text-center">
+        <img src="~/images/News/placeHolder.png" alt="place holder" class="img-responsive center-block" />
+        <hr />
+        <h3 class="text-center">News Name</h3>
+        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s Lorem Ipsum has been the industry's.</p>
+        <button type="button" class="btn btn-default">Read More</button>
+    </div>
+</div>

@@ -23,9 +23,9 @@ namespace Version1.Controllers
             // return;
             if(ModelState.Count == 0)
             {
-                var areaname = filterContext.ActionDescriptor.RouteConstraints.Where(i => i.RouteKey == "area").First().RouteValue.ToString();
-                var controllerName = filterContext.ActionDescriptor.RouteConstraints.Where(i => i.RouteKey == "controller").First().RouteValue.ToString();
-                var actionName = filterContext.ActionDescriptor.Name;
+                var areaname = filterContext.ActionDescriptor.RouteValues.Where(i => i.Key == "area").First().Value.ToString();
+                var controllerName = filterContext.ActionDescriptor.RouteValues.Where(i => i.Key == "controller").First().Value.ToString();
+                var actionName = filterContext.ActionDescriptor.DisplayName;
                 // var userId = _userManager.GetUserAsync(HttpContext.User).Id.ToString();
                 var userId = "";
                 var FullControllerName = areaname + "/" + controllerName;

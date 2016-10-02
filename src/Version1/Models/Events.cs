@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace Version1.Models
 {
     public class Events
-    {   public string event_ID { get; set; }
+    {
+        public string event_ID { get; set; }
         [Display(Name = "Title")]
         public string event_name { get; set; }
         [Display(Name = "Activity Address")]
@@ -19,5 +20,5 @@ namespace Version1.Models
         public string event_profile { get; set; }
         public string event_picture { get; set; }
         public string teamid { get; set; }
-}
+    }
 }

@@ -2,145 +2,162 @@
 <!-- Note: The background image is set within the business-casual.css file. -->
 @model HomeIndexViewModel
 
-@section styles{
+@section style{
     <style>
-        #div_images {
-            margin-top: 30px;
+        .home_block {
+            margin-top: 50px;
         }
 
-        .div_image {
-            min-height: 180px;
-            height: 220px;
+        .carousel {
+            width: inherit;
         }
 
-        .sponsorImg {
-            max-width: 250px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-        }
-
-        #div_news {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-
-        #div_events {
-            margin-top: 30px;
-            color: white;
-            background-color: #76c49e;
+        .item {
+            color: #666;
+            background: #333;
+            height: 300px;
+            line-height: 300px;
+            /* Align the text vertically center. */
+            font-size: 52px;
             text-align: center;
-            padding-bottom: 30px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
-        .event_info {
-            margin-top: 10px;
-            background-color: black;
-            padding-top: 15px;
-            padding-bottom: 15px;
+        .carousel-control {
+            top: 50%;
+            /* border 3px, size 40px */
+            border: 3px solid #fff;
+            -webkit-border-radius: 23px;
+            -moz-border-radius: 23px;
+            border-radius: 23px;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            font-size: 60px;
+            font-weight: 100;
+            line-height: 25px;
+            color: #fff;
+            text-align: center;
+            opacity: .5;
+            filter: alpha(opacity=50);
         }
 
-        #div_sponsors {
-            margin: 0;
-            background-color: blanchedalmond;
+        .bs-example {
+            margin: 20px;
         }
-        hr{
-            
+        /* cancel background image gradient */
+        .carousel-control.left-flat {
+            right: auto;
+            left: 15px;
+        }
+        /* override background image gradient */
+        .carousel-control.right-flat {
+            right: 15px;
+            left: auto;
+        }
+
+        .hori_inner_block {
+        }
+
+        .horizontal_eventsBar {
+            background-color: cadetblue;
+        }
+
+        .block_slider {
+            overflow: hidden;
+            position: relative;
         }
     </style>
-
 }
 
-<header class="business-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12" style="margin-top:15%">
-                <h1 class="tagline">Business Name or Tagline</h1>
-                <p>"A vibrant and diverse community that takes the lead in its own future.."</p>
-            </div>
-        </div>
-    </div>
-</header>
-
 <!-- Page Content -->
-<div id="div_news" class="container">
-    <div>
-        <h1 class="text-center">What's new</h1>
-        <h5 class="text-center"><em>ipsum dolor sit amet consectetur.</em></h5>
+
+<div id="fb-root"></div>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.7&appId=539163436255187";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+
+<div class="row home_main">
+    <div class="col-md-8" role="main">
+        <div class="home_block block_titleBox">
+            <div class="jumbotron">
+                <h1>Hello, world!</h1>
+                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+            </div>
+        </div>
+
+        <div class="home_block block_slider bs-example">
+            <div id="myCarousel" class="carousel slide">
+                <!-- Carousel indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <div class="active item">Slide 1</div>
+                    <div class="item">Slide 2</div>
+                    <div class="item">Slide 3</div>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left-flat" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right-flat" href="#myCarousel" data-slide="next">&rsaquo;</a>
+            </div>
+        </div>
+
+        <div class="horizontal_eventsBar row">
+            <div class="col-md-4 hori_inner_block" id="block1">
+                <div class="event_image">
+                    <a href="#">
+                        <img src="~/images/Home/learn_1.jpg" alt="" class="img-responsive" />
+                    </a>
+                </div><!-- event_image -->
+            </div>
+
+            <div class="col-md-4 hori_inner_block" id="block2">
+                <div class="event_image">
+                    <a href="#">
+                        <img src="~/images/Home/learn_1.jpg" alt="" class="img-responsive" />
+                    </a>
+                </div><!-- event_image -->
+            </div>
+
+            <div class="col-md-4 hori_inner_block" id="block3">
+                <div class="event_image">
+                    <a href="#">
+                        <img src="~/images/Home/learn_1.jpg" alt="" class="img-responsive" />
+                    </a>
+                </div><!-- event_image -->
+            </div>
+
+            <div class="col-md-4 hori_inner_block" id="block4">
+                <div class="event_image">
+                    <a href="#">
+                        <img src="~/images/Home/learn_1.jpg" alt="" class="img-responsive" />
+                    </a>
+                </div><!-- event_image -->
+            </div>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <img class="img-thumbnail img-responsive img-center" src="http://placehold.it/300x300" alt="">
-            <h2>Marketing Box #1</h2>
-            <p>These marketing boxes are a great place to put some information. These can contain summaries of what the company does, promotional information, or anything else that is relevant to the company. These will usually be below-the-fold.</p>
-            <a class="btn btn-default btn-sm" href="#">Read More &raquo;</a>
+
+    <div class="col-md-4" role="complementary">
+        <div class="home_block vertical_buttonsBar">
+
         </div>
-        <div class="col-sm-4">
-            <img class="img-thumbnail img-responsive img-center" src="http://placehold.it/300x300" alt="">
-            <h2>Marketing Box #2</h2>
-            <p>The images are set to be circular and responsive. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-            <a class="btn btn-default btn-sm" href="#">Read More &raquo;</a>
-        </div>
-        <div class="col-sm-4">
-            <img class="img-thumbnail img-responsive img-center" src="http://placehold.it/300x300" alt="">
-            <h2>Marketing Box #3</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-            <a class="btn btn-default btn-sm" href="#">Read More &raquo;</a>
+
+        <div class="home_block vertical_facebookBar">
+            <div class="fb-page" data-href="https://www.facebook.com/SouthAlive" data-tabs="timeline" data-width="600" data-height="600" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                <blockquote cite="https://www.facebook.com/SouthAlive" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/SouthAlive">South Alive.</a></blockquote>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="div_events">
-    <div class="container">
-        <div>
-            <h1 class="text-center">Recent events</h1>
-            <h5 class="text-center"><em>ipsum dolor sit amet consectetur.</em></h5>
-        </div>
-        <br />
-        @foreach(var e in Model.Events)
-        {
-            <div class="col-md-3">
-                <img class="img-responsive" style="width:690px;height:200px" src="~/images/Events/@e.event_picture" />
-                <div class="event_info">
-                    <strong><i>@e.event_name</i></strong>
-                    <address>@e.event_address</address>
-                    <strong>@e.event_datetime.ToString()</strong>
-                    <p><i>@e.event_profile</i></p>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-<div id="div_sponsors">
-    <div class="container">
-        <h1 class="text-center">Sponsors</h1>
-        <div id="div_images" class="row">
-            <div class="row">
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/ctoslogo.png" alt="Alternate Text" />
-                </div>
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
-                </div>
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/pocock.png" alt="Alternate Text" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/southroadslogo.png" alt="Alternate Text" />
-                </div>
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/icclogo.png" alt="Alternate Text" />
-                </div>
-                <div class="col-md-4 div_image">
-                    <img class="img-center img-responsive sponsorImg" src="~/images/iltlogo.png" alt="Alternate Text" />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- /.row -->
+<div class="row home_sponser"></div>

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Version1.Controllers
 {
-    public class EventController : Controller
+    public class NewsController : Controller
     {
         // GET: /<controller>/
         public IActionResult Index()
@@ -16,7 +16,7 @@ namespace Version1.Controllers
             return View();
         }
 
-        public IActionResult EventDetail()
+        public IActionResult SingleNews()
         {
             return View();
         }

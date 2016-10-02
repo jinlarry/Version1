@@ -3,3 +3,77 @@
 *@
 @{
 }
+
+@section style{
+    <style>
+        .newsletter_block {
+            margin-top: 50px;
+        }
+
+        .table {
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .14);
+        }
+    </style>
+
+}
+<div class="newsletter_block newsletter_title">
+    <h1 class="text-center">Newsletters</h1>
+</div>
+
+<div class="newsletter_block newsletter_snapshot">
+    <div class="jumbotron newsletter_block newsletter_prevw">
+        <div class="img-center img-responsive inner_block">
+
+        </div>
+    </div>
+
+    <embed src="~/pdf/time.pdf" width="750" height="375">
+</div>
+
+<div class="newsletter_block newsletter_selectByDate">
+    <form class="form-inline" asp-action="" asp-controller="" asp-area="" method="post" role="form">
+        <div class="form-group">
+            <label class="control-label" for="select_date">Search by mouth: </label>
+            <input type="text" class="form-control" id="select_date" placeholder="Enter date here">
+        </div>
+        <button type="submit" class="btn btn-default">Search</button>
+    </form>
+</div>
+
+<div class="newsletter_block newsletter_table">
+    <table class="table table-bordered table-responsive table-striped">
+        <thead class="thead-default">
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td><a href="#">Mark</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">Otto</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">mdo</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td><a href="#">Mark</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">Otto</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">mdo</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td><a href="#">Mark</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">Otto</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+                <td><a href="#">mdo</a> <a href="#"> <span class="glyphicon glyphicon-eye-open"></span></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

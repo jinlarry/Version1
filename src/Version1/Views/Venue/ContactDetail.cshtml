@@ -1,0 +1,86 @@
+﻿@model BookingViewModel
+
+@section style{
+<style>
+    .contact_detail_input {
+        padding: 15px;
+    }
+
+    .contact_detail_preview {
+        padding: 15px;
+    }
+
+    h1 {
+        margin-top: 50px;
+    }
+
+    /*.contact_detail {
+                margin: 10px;
+            }*/
+</style>
+}
+
+<h1>Add your Info</h1>
+
+<form asp-action="ContactDetail" asp-controller="Venue" method="post" multiple>
+    <div class="row contact_detail_table">
+
+        <div class="form-group">
+            <label for="input_firstname">Firstname</label>
+            <input asp-for="@Model.Firstname" type="text" class="form-control" id="input_firstname" placeholder="Firstname">
+        </div>
+
+        <div class="form-group">
+            <label for="input_lastname">Lastname</label>
+            <input asp-for="@Model.Lastname" type="text" class="form-control" id="input_lastname" placeholder="Lastname">
+        </div>
+
+        <div class="form-group">
+            <label for="input_phone">Phone</label>
+            <input asp-for="@Model.PhoneNum" type="number" class="form-control" id="input_phone" placeholder="Phone">
+        </div>
+
+        <div class="form-group">
+            <label for="input_email">E-mail</label>
+            <input asp-for="@Model.Email" type="email" class="form-control" id="input_email" placeholder="Email address">
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input asp-for="@Model.isPublicEvent" type="checkbox">This is a public event
+            </label>
+        </div>
+
+        <p>Booking detail:</p>
+
+        <hr />
+
+        <div class="form-group">
+            <label for="value_date">Date: </label>
+            <span id="value_date">@Model.DayName @Model.DayNumber, @Model.Month</span>
+        </div>
+
+        <div class="form-group">
+            <label for="value_startTime">Start Time: </label>
+            <span id="value_startTime">@Model.StartTime</span>
+            <input asp-for="@Model.StartTime" type="hidden" value="@Model.StartTime" />
+        </div>
+
+        <div class="form-group">
+            <label for="value_endTime">End Time: </label>
+            <span id="value_endTime">@Model.EndTime</span>
+            <input asp-for="@Model.EndTime" type="hidden" value="@Model.EndTime" />
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+
+@section scripts{
+
+}
+
+
+
+
+

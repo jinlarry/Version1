@@ -1,0 +1,190 @@
+﻿@model BookingViewModel
+
+@section style{
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/css/bootstrap-combined.min.css" rel="stylesheet" />
+    <link href="//arshaw.com/js/fullcalendar-1.5.3/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <link href="http://arshaw.com/js/fullcalendar-1.5.3/fullcalendar/fullcalendar.print.css" rel="stylesheet" />
+
+    <style>
+        #calendar {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .selected {
+            background-color: darkcyan;
+        }
+
+        .event_time {
+            height: 30px;
+            width: 200px;
+            background-color: darkseagreen;
+            margin: 10px;
+            padding-top: 2%;
+        }
+
+            .event_time:hover {
+                background-color: antiquewhite;
+            }
+
+        .time_list_container {
+            text-align: center;
+        }
+
+        .row {
+            margin-top: 50px;
+        }
+    </style>
+}
+
+
+<title>Calendar</title>
+
+<div class="row calendar_container">
+    <h1>Date</h1>
+    <span class="demo"></span>
+    <span class="test_month"></span>
+    <div id='calendar'></div>
+</div>
+
+<div class="row timeTables_container">
+    <div class="col-md-6 time_list_container">
+        <div class="timeTable timeTable_startTime">
+            <select class="start_time_dropdown">
+                <option class="start_time place_holder" selected="selected">Select start time...</option>
+                @for(int i = 6; i < 21; i++)
+                {
+                    <option class="start_time">@i</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6 time_list_container">
+        <div class="timeTable timeTable_endTime">
+            <select class="selectpicker end_time_dropdown" disabled>
+                <option class="end_time place_holder" selected="selected">Select end time...</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<form asp-action="DatePicking" asp-controller="Venue" method="post" role="form" mutiple>
+    <input asp-for="@Model.DayName" id="val_dayname" type="hidden" value="" />
+    <input asp-for="@Model.DayNumber" id="val_dayNumber" type="hidden" value="" />
+    <input asp-for="@Model.Month" id="val_month" type="hidden" value="" />
+    <input asp-for="@Model.StartTime" id="val_startTime" type="hidden" value="" />
+    <input asp-for="@Model.EndTime" id="val_endTime" type="hidden" value="" />
+
+    <button class="btn btn-default submit" type="submit">
+        Click
+    </button>
+</form>
+
+@section scripts{
+    <script class="cssdesk" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+    <script class="cssdesk" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript"></script>
+    <script class="cssdesk" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js" type="text/javascript"></script>
+    <script class="cssdesk" src="//arshaw.com/js/fullcalendar-1.5.3/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+
+    <script>
+        /* Javascript */
+        $(document).ready(function () {
+            // Vars for calendar.
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+
+            // Vars for data tansfer.
+            var picked_day;
+            var picked_dayName;
+            var picked_month;
+            var picked_startTime;
+            var picked_endTime;
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title'
+                },
+                editable: true,
+            });
+
+            $('.fc-widget-content').on('click', function (event) {
+
+                // Set one and one date to be selected.
+                $('.fc-widget-content').each(function (event) {
+                    $(this).removeClass('selected');
+                });
+
+                $(this).toggleClass("selected");
+
+                // Assign the selected day number to var picked_day.
+                // Value need to be passed.
+                picked_day = $(this).children().children(".fc-day-number").text();
+                $('#val_dayNumber').val(picked_day);
+
+                // Assign the day name to var picked_dayName.
+                // Value need to be passed.
+                if ($(this).hasClass("fc-mon")) {
+                    picked_dayName = 'Mon';
+                } else if ($(this).hasClass("fc-tue")) {
+                    picked_dayName = 'Tue';
+                } else if ($(this).hasClass("fc-wed")) {
+                    picked_dayName = 'Wed';
+                } else if ($(this).hasClass("fc-thu")) {
+                    picked_dayName = 'Thu';
+                } else if ($(this).hasClass("fc-fri")) {
+                    picked_dayName = 'Fri';
+                } else if ($(this).hasClass("fc-sat")) {
+                    picked_dayName = 'Sat';
+                } else {
+                    picked_dayName = 'Sun';
+                }
+
+                $('#val_dayname').val(picked_dayName);
+
+                // Assign month value to picked_month.
+                // Value need to be passed.
+                picked_month = $('h2').text().split(' ')[0];
+                $('#val_month').val(picked_month);
+            });
+
+            $('.start_time_dropdown').on('change', function (event) {
+
+                // The ini time for generate the end time list.
+                var ini_end_time;
+
+                // Assign selected start time to var picked_startTime.
+                picked_startTime = $('.selectpicker_start_time').val();
+
+                // Enable end time selection.
+                $('.end_time_dropdown').attr("disabled", false);
+
+                // Remove all selections in end_time list and replace them based on new start time.
+                $('.end_time_dropdown').children().not('.place_holder').remove();
+                ini_end_time = parseInt($('.start_time_dropdown').val()) + 1;
+
+                // Generate end time list.
+                for (i = ini_end_time ; i < 22; i++) {
+                    $('.end_time_dropdown').append('<option class="end_time">' + i + '</option>');
+                }
+
+                // Value need to be passed.
+                picked_startTime = $('.start_time_dropdown').val();
+                $('#val_startTime').val(picked_startTime);
+            });
+
+            $('.timeTable_endTime').on("change", ".end_time_dropdown", function (event) {
+
+                // Value need to be passed.
+                picked_endTime = $(this).val();
+                $('#val_endTime').val(picked_endTime);
+            });
+        });
+    </script>
+}
+
+
+
+

@@ -1,177 +1,66 @@
-﻿@model FronTeamViewModel
-@section styles{
+﻿@section style{
     <style>
-        .single_team {
-            padding: 10px;
-            position: relative;
-            max-height: 400px;
-            max-width: 590px;
+        .team_block {
+            margin-top: 50px;
         }
 
-        .team_img {
-            height: 280px;
-            width: 570px;
-        }
-
-        .overlay {
-            position: absolute;
-            visibility: visible;
-            top: 10%;
-            bottom: 10%;
-            padding-top: 10%;
-            padding-left: 20%;
-            padding-right: 20%;
-            margin-right: 1.5%;
-            opacity: 0;
-            width: 565px;
-        }
-
-        .single_team:hover .overlay {
-            background-color: #808080;
-            opacity: 0.8;
-            transition: all 200ms;
-        }
-
-        .captionlink {
-            background: #0094ff;
-            width: 100%;
-            display: block;
-            height: 40px;
+        .team_image {
             text-align: center;
-            line-height: 40px;
-            font-size: 20px;
+            margin-bottom: 10px;
         }
 
-        .single_team:hover .team_img {
-            box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.3), 0 15px 25px 0 rgba(0, 0, 0, 0.4);
-            transition: all 200ms;
+        .team_description_img {
+            text-align: center;
         }
-
-        .team_info {
-            color: antiquewhite;
-            font-size: large;
-            position: center;
-        }
-        /*.fixed_sponsor {
-                position: fixed;
-                top: 10%;
-                right: 5%;
-                width: 180px;
-                height: 180px;
-                background: #128b98;
-                color: #fff;
-                border-radius: 50%;
-                padding: 50px 30px;
-
-            }*/
     </style>
+
 }
 
-<div id="all_teams" class="container">
-    <div class="row">
-        <h1 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">ALL TEAMS</h1>
-    </div>
-
-    <div class="row">
-        @foreach(var item in Model.Teams)
-        {
-            var src = $"team_{item.TeamName}.jpg";
-
-            //var absolutePath = HttpContext.Server.MapPath(relativePath);
-            //if(System.IO.File.Exists(absolutePath)) ....
-
-            <div class="col-md-6 single_team">
-                <a href="/team/teamdetail">
-                    <img class="img-responsive team_img" src="~/images/Teams/@item.TeamImage" alt="team img" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            @item.TeamName
-                        </span>
-                        <br />
-                        <span class="team_info">
-                            @item.TeamDescription
-                        </span>
-                    </div>
-                </a>
-            </div>
-        }
-    </div>
-
-    @*<div class="row">
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/team_neighbour.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/vase_3a.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/vase_1a.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/vase_3a.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/vase_6a.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 single_team">
-                <a href="#">
-                    <img class="img-responsive team_img" src="~/images/vase_1a.jpg" alt="vase" />
-                    <div class="overlay">
-                        <span class="team_info">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aenean consectetur ante volutpat sem aliquam lobortis.
-                        </span>
-                    </div>
-                </a>
-            </div>
-        </div>*@
+<div class="row team_block team_page_title">
+    <h1 class="text-center">Teams</h1>
 </div>
+
+<div class="team_block team_block_about">
+    <div class="row">
+        <div class="col-md-6 team_description">
+            <p>I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me and you can start adding your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.</p>
+        </div>
+
+        <div class="col-md-6 team_description_img">
+            <img src="~/images/placeholder3.jpg" alt="" class="img-responsive img-rounded" />
+        </div>
+    </div>
+</div>
+
+<div class="team_block team_block_group">
+    <div class="row">
+        <div class="col-md-6 team_image">
+            <div class="team_title"></div>
+            <div class="inner_team_image">
+                <img src="~/images/placeholder2.jpg" alt="" />
+            </div>
+        </div>
+
+        <div class="col-md-6 team_image">
+            <div class="team_title"></div>
+            <div class="team_image inner_team_image">
+                <img src="~/images/placeholder2.jpg" alt="" />
+            </div>
+        </div>
+
+        <div class="col-md-6 team_image">
+            <div class="team_title"></div>
+            <div class="team_image inner_team_image">
+                <img src="~/images/placeholder2.jpg" alt="" />
+            </div>
+        </div>
+
+        <div class="col-md-6 team_image">
+            <div class="team_title"></div>
+            <div class="team_image inner_team_image">
+                <img src="~/images/placeholder2.jpg" alt="" />
+            </div>
+        </div>
+    </div>
+</div>
+

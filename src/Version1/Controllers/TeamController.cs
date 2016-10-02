@@ -29,9 +29,15 @@ namespace Version1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult TeamDetail(string param)
+        //public IActionResult TeamDetail(string param)
+        //{
+        //    return View();
+        //}
+
+        public IActionResult TeamDetail()
         {
             return View();
         }
+
     }
 }

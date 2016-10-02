@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+
+
 using Version1.ViewModels.Home;
 using Version1.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Version1.Controllers
 {

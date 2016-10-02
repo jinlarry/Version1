@@ -46,6 +46,10 @@ namespace Version1.Models
         public DbSet<Events> Events { get; set; }
 
         public DbSet<Newsletter> Newsletters { get; set; }
+
+        public DbSet<BookingOrder> BookingOrders { get; set; }
+
+        public DbSet<Venue> Venues { get; set; }
     }
 
 }

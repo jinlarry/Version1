@@ -4,9 +4,32 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+/*.navbar-nav > li > a {padding-top:5px !important; padding-bottom:5px !important;}*/
+* {
+    box-sizing: border-box;
+}
+
+.navbar {
+    height: 70px !important;
+    min-height: 32px !important;
+    padding: 11px;
+    border-bottom: 2px solid blue;
+    background-color: white;
+    background-image: none;
+}
+
+
+.navbar-inverse .navbar-nav > li > a {
+    color: black;
+}
+
+    .navbar-inverse .navbar-nav > li > a:hover {
+        color: burlywood;
+    }
+
 body {
     padding-top: 30px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    background-color: #82a1c4;
+    background-color: white;
 }
 
 /* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
@@ -14,10 +37,7 @@ body {
 .business-header {
     height: 600px;
     background: url('../images/jubimage.jpg') center center no-repeat scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
     background-size: cover;
-    -o-background-size: cover;
     font-size: 20px;
 }
 
