@@ -1,0 +1,163 @@
+﻿ 
+@model   Version1.Areas.Management.Controllers.MIviewmodel 
+ 
+<h2>To-do List</h2><hr />
+<div class="container">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3" style="font-size:50">
+                        <i class="social_myspace"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge" style="font-size:50">0</div>
+                        <div>New Volunteers</div>
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="Volunteer" asp-action="Index">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3" style="font-size:50">
+                        <i class="icon_building_alt"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge" style="font-size:50">0</div>
+                        <div>New Events</div>
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="Events" asp-action="Index">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3" style="font-size:50">
+                        <i class="icon_shield" style="font-size:50"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge" style="font-size:50">0</div>
+                        <div>News Uncensored</div>
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="News" asp-action="CensorIndex" asp-route-id="Uncensored">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3" style="font-size:50">
+                        <i class="icon_box-checked"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div class="huge" style="font-size:50">0</div>
+                        <div>Booking Unapproved</div>
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="News" asp-action="CensorIndex" asp-route-id="Uncensored">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+
+        
+
+    </div>
+
+    <div class="col-lg-9">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#EventsTrend" data-toggle="tab">
+                    Event-Trend
+                </a>
+            </li>
+            <li><a href="#BookingApprove" data-toggle="tab">BookingApprove</a></li>
+
+        </ul>
+
+        <div id="myTabContent" class="tab-content"><br>
+            <div class="tab-pane fade in active" id="EventsTrend" style="width:100%;height:100%"> 
+                <div class="col-sm-12 text-center" style="width:100%;height:100%"> 
+                    <label class="label label-success">Event-Trend Chart</label><br>              
+                    <div id="area-chart" style="position:center"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="BookingApprove">
+                <p>
+                    BookingApprove 是一个由苹果公司开发和发布的手机操作系统。
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="~/lib/elegant_font/HTML CSS/style.css">
+    <link rel="stylesheet" type="text/css" href="~/lib/dist/css/sb-admin-2.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+2
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+3
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+4
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var data = @Html.Raw( Model.chartdata );                 
+      config = {
+          data: data,
+          xkey: 'x',
+          ykeys: 'y',
+          labels: ['Total Income', 'Total Outcome'],
+          fillOpacity: 0.6,
+          hideHover: 'auto',
+          behaveLikeLine: true,
+          resize: true,
+          pointFillColors: ['#ffffff'],
+          pointStrokeColors: ['black'],
+          lineColors: ['gray', 'red']
+      };
+            config.element = 'area-chart';
+            Morris.Area(config);
+
+            config.stacked = true;
+          //  Morris.Bar(config);
+            Morris.Donut({
+                element: 'pie-chart',
+                data: [
+                  { label: "Friends", value: 30 },
+                  { label: "Allies", value: 15 },
+                  { label: "Enemies", value: 45 },
+                  { label: "Neutral", value: 10 }
+                ]
+            });
+
+        });
+    </script>   }

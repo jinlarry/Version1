@@ -1,0 +1,127 @@
+@model Version1.Models.Gallery
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Management/Views/Shared/_ManagementLayout.cshtml";
+}
+
+<style>
+    .a-upload {
+        padding: 4px 10px;
+        height: 30px;
+        line-height: 20px;
+        position: relative;
+        cursor: pointer;
+        color: #888;
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+    }
+</style>
+<h2>Edit</h2>
+
+<form asp-area="management" asp-action="Edit" asp-route-id="@Model.PhotoID" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <h4>Gallery</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div><input type="hidden" asp-for="PhotoID" />
+        <div class="form-group">
+            <label asp-for="PhotoTitle" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PhotoTitle" class="form-control" />
+                <span asp-validation-for="PhotoTitle" class="text-danger" />
+            </div>
+        </div>     
+        <div class="form-group">
+            <label asp-for="Album" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select id="AlbumEditSelect"  asp-for="Album"  asp-items="@ViewBag.AlbumEdit" class="form-control"> </select>  
+                <span asp-validation-for="Album" class="text-danger" />
+            </div>
+        </div>         
+        
+        <div class="form-group">
+            <label asp-for="PhotoPath" class="col-md-2 control-label">PHOTO</label>
+            <a  href="javascript:;" class="a-upload">
+                <input type="file" id="InsertImage" value="Open file" title="Open file" accept=".JPG,.JPEG,.GIF,.PNG,.BMP" name="NewsImagepp" multiple />
+            </a>
+            <div class="col-md-offset-2 col-md-10">
+                <div>  <img ID="opop" src="~/images/Gallery/@Model.PhotoPath" /></div>
+                <div>
+                    (PHOTO SIZE:<label id="sizeofphoto" >@Model.PhotoSize bytes</label>) 
+                </div>
+                    <input asp-for="PhotoPath" type="hidden" class="form-control" />
+                </div>
+        </div>
+        <div class="form-group">
+            
+            <div class="col-md-offset-2 col-md-10">
+               
+                <input asp-for="PhotoSize" type="hidden" id="psize" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input class="btn btn-primary"  type="submit" value="Save"  />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a class="btn btn-link"   asp-area="management" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+  <link rel="stylesheet" type="text/css" href="~/lib/elegant_font/HTML CSS/style.css">
+<link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+   <script>
+    $(document).ready(function () {
+        var _self = this;
+
+        _self.getObjectURL = function (file) {
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file)
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file)
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file)
+            }
+            return url
+        };
+        $("#InsertImage").change(function (e) {
+
+             var path = _self.getObjectURL(this.files[0]);
+     
+             $("#sizeofphoto")[0].innerHTML = this.files[0].size + " bytes";
+             if (path!="") {
+                // alert(path);
+                 $("#opop").attr('src', path);
+               
+                 //$("#NewsImage").attr('value', path);
+
+             }
+
+         });
+
+   })
+
+</script>
+     <script>
+        $(function () {
+         
+            $('#AlbumEditSelect').editableSelect({ effects: 'slide', duration: 200, filter: false });
+
+
+        });
+
+     </script>
+}

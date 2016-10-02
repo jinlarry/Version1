@@ -1,0 +1,92 @@
+@model Version1.Controllers.Viewmodel_News
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Management/Views/Shared/_ManagementLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>News</h4>
+    <hr />
+    
+     <dl class="dl-horizontal">
+         <dt>
+             @Html.DisplayNameFor(model => model.news.NewsTitle)
+         </dt>
+         <dd>
+             @Html.DisplayFor(model => model.news.NewsTitle)
+         </dd>
+         <dt>
+             @Html.DisplayNameFor(model => model.news.NewsType)
+         </dt>
+         <dd>
+             @Html.DisplayFor(model => model.news.NewsType)
+         </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.news.NewsContent)
+        </dt>
+        <dd>
+            <textarea  readonly="readonly"  style="min-width:80%;background-color:white;height:auto" asp-for="@Model.news.NewsContent" class="form-control" id="editor1"   cols="80"></textarea>
+        </dd>
+         <dt>
+             @Html.DisplayNameFor(model => model.news.CreateTime)
+         </dt>
+         <dd>
+             @Html.DisplayFor(model => model.news.CreateTime)
+         </dd>
+         <dt>
+             @Html.DisplayNameFor(model => model.news.NewsImage)
+         </dt>
+        
+        <dd>
+            <img  src="~/images/News/@Model.news.NewsImage" align="left" width="400" height="200" display=inline>
+             
+          </dd>
+            
+           
+            <dt>
+                @Html.DisplayNameFor(model => model.news.Selected)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.news.Selected)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.SensorName)
+            </dt>
+            <dd>
+                @{if (Model.SensorName == "" || Model.SensorName == null)
+                    {
+                        @Html.Raw("Uncensored");
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.SensorName);
+                    }
+                }      
+               
+            </dd>
+       
+             @{if (Model.news.CensorTime == null  || Model.news.CensorTime ==DateTime.Parse( "01/01/0001 00:00:00"))
+                 {
+                     @Html.Raw(""); 
+                 }
+                 else
+                 {
+                     @Html.Raw("<dt>"); @Html.DisplayNameFor(model => model.news.CensorTime); @Html.Raw("</dt> <dd>   ");
+                     @Html.DisplayFor(model => model.news.CensorTime); @Html.Raw(" </dd>");
+                 }
+            }
+             
+             
+     
+        </dl> 
+</div>
+<div>
+    <a asp-route-area="management" asp-action="Edit" asp-route-id="@Model.news.ID">Edit</a> |
+    <a asp-route-area="management" asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+}

@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form asp-controller="Account" asp-action="Register" method="post" class="form-horizontal" role="form">
+    <h4>Create a new account.</h4>
+    <hr />
+
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Register</button>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    <script type="text/javascript">
+        // when #btnAddNewRole click
+        $(document).ready(function () {
+            $('#btnAddNewRole').click(function (event) {
+                $('#addedRoles').append(
+                    '<div class="col-md-10">'
+                    + '<input class="addedRole form-control" id="addedRoles" class="form-control" />'
+                    + '</div>');
+            });  // end of #btnAddNewRole click
+
+            // when .linkRemoveRole click
+            $('#currentRoles').on('click', '.linkRemoveRole', function (event) {
+                var roleName = $(this).siblings().text();
+                $(this).parentsUntil('#currentRoles').remove();
+                $('#removedRoles').append(
+                  '<li class="removedRole list-group-item">'
+                + '<div class="col-md-6">'
+                + roleName
+                + '</div>'
+                + '<a href="#" class="linkAddRoleBack">Add Role Back</a>'
+                + '</li>');
+            }); // end of .remove_field click
+
+            $('#removedRoles').on('click', '.linkAddRoleBack', function (event) {
+                var roleName = $(this).siblings().text();
+                $(this).parentsUntil('#removedRoles').remove();
+                $('#currentRoles').append(
+                '<li class="currentRole list-group-item">'
+                + '<div class="col-md-6">'
+                + roleName
+                + '</div>'
+                + '<a href="#" class="linkRemoveRole">Remove This Role</a>'
+                + '</li>');
+            });
+        });
+    </script>
